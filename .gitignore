@@ -1,0 +1,75 @@
+# ===========================
+# Operating System Files
+# ===========================
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ===========================
+# Environment and Configuration Files
+# ===========================
+
+# Environment variables
+.env
+
+# Instance-specific configurations
+instance/
+
+# ===========================
+# Python Bytecode and Caches
+# ===========================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ===========================
+# Logs and Temporary Files
+# ===========================
+
+# Log files
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# ===========================
+# Virtual Environments
+# ===========================
+
+# Virtual environment directories
+venv/
+env/
+.venv/
+.env/
+# ===========================
+# Data
+# ===========================
+
+data/
+.data/
+
+# ===========================
+# IDE and Editor Directories
+# ===========================
+
+# Visual Studio Code
+.vscode/
+
+# JetBrains IDEs (e.g., PyCharm, IntelliJ)
+.idea/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
