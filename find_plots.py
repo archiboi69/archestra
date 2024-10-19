@@ -53,6 +53,19 @@ accessible_empty_plots = empty_plots_without_plan[empty_plots_without_plan.inter
 
 print("Suitable plots found:", len(accessible_empty_plots))
 
+# Save the suitable plots to a GeoJSON file
+output_file = "suitable_plots.geojson"
+accessible_empty_plots.to_file(output_file, driver="GeoJSON")
+print(f"Suitable plots saved to {output_file}")
+
+# Optionally, you can also save to other formats like Shapefile or GeoPackage
+# Shapefile
+# accessible_empty_plots.to_file("suitable_plots.shp")
+
+# GeoPackage
+# accessible_empty_plots.to_file("suitable_plots.gpkg", driver="GPKG")
+
+
 # Plot the results
 fig, ax = plt.subplots(figsize=(12, 8))
 area_with_local_plan.plot(ax=ax, color='red', alpha=0.3)
