@@ -1,166 +1,114 @@
-# Foreword
-
-`jaki jest cel tego dyplomu dla mnie?`
-
-I chose architecture to improve the built environment. To do this effectively, I need to run a viable architectural
-business. This thesis explores strategies for creating a next-generation practice.
-
 # Part I: Theory
 
 ## Aim
 
-This thesis aims to establish a lean, sustainable business model for sole-proprietor architectural practices by
-automating labor-intensive tasks. The goal is to enable these firms to improve service quality and remain competitive
-on the evolving market.
+`revise based on gaps in state-of-the-art and research questions`
+
+This thesis aims to establish a competitive and sustainable business model for sole-proprietor architectural practices.
 
 ## Relevance
 
-### The business of architecture
+### The business model of architecture
 
-Architecture firms are small and medium enterprises that provide professional architectural services. The core of these
-services involves translating client needs and regulatory requirements into functional, aesthetic, and durable designs.
-To deliver these services, a firm usually employs architects who collaborate to create design solutions (Scharphie,
-2014).
+Architectural firms are small and medium enterprises that provide professional architectural services. The core of these services involves translating client needs and regulatory requirements into functional, aesthetic, and durable designs. Frequently, architects' services create societal value for stakeholders other than the client, such as the local community, environment, and users. To deliver these services, a firm usually employs architects who collaborate to create design solutions (Scharphie, 2014).
 
-Most practices have a simple business model that converts a fee agreed in the contract to time billed to the project,
-with leftover sum forming the operating profit on net revenue (Bernstein, 2018). To ensure continued business and
-manage risk, firms need to increase their output to take on larger and more numerous projects. To achieve it, they
-typically hire more architects and boost their productivity through investments in design tools (Celiński, 2024). This
-ties the revenue to employment and for a given productivity level, the more architects work for a firm the greater its
-revenue (ACE, 2022).
+Most practices have a simple revenue model that converts a fee agreed in the contract to the time of architects that is billed to the project, with leftover sum forming the operating profit on net revenue (Bernstein, 2018). The business model of architecture has some unique characteristics in comparison to other professional services. First, as the work is project-based, the value proposition changes from project to project, depending on the client and the role in the project. Second, not only is the use value subjective and uncertain upfront, but also it is often co-created with stakeholders. Moreover, the use value of different stakeholders can be contradicting, leading to value conflicts that have to be resolved by the architect. Third, some of the value is captured as professional value (e.g. reputation, work pleasure) rather than monetary value and architects are often found to maximize professional value at the expense of income or even use value for the client (Bos-de Vos, 2022).
+
+Following is the description of the most common revenue models in architectural practice in selected European markets.
+
+### Revenue
+
+Architectural fees are the primary source of revenue for a practice. The fee structure varies across countries. In Poland, the fees are typically structured as either fixed charge (53%, with around half calculated as a percent of contract value, and the other half as a lump sum) or hourly charge (22%) (ACE, 2022).
+
+![alt text](img/fee_structures_by_country_grouped_bar.png)
+
+To increase revenue, architectural firms typically hire more architects to take on larger and more numerous projects. This ties the revenue to employment and for a given productivity level, the more architects work for a firm the greater its revenue (ACE, 2022).
 
 Revenues per practice size in select European markets:
 | Country | 1 staff | 2 staff | 3-5 staff | 6-10 staff | 11-30 staff |
 | --- | --- | --- | --- | --- | --- |
-| Poland | €25,256 | €33,128 | €208,145 | €144,394 | €387,454 |
+| Poland | €25,256 | €33,128 | €144,394 | €208,145 | €387,454 |
 | Portugal | €24,416 | €46,214 | €134,954 | €260,457 | €1,223,018 |
 | Germany | €87,259 | €153,273 | €301,210 | €622,718 | €1,490,366 |
 | European average | €63,073 | €111,809 | €237,039 | €522,804 | €1,410,682 |
 
-In Poland, architectural fees are typically structured as either fixed fees or hourly billing. Fixed fees, which account
-for 53% of projects, can be calculated as a percentage of contract value (28% of cases) or as a lump sum (25% of cases).
-Hourly billing is used in 22% of projects. For fixed fee contracts, architects can increase their operating profit by
-negotiating a higher fee or improving productivity to complete work more efficiently. With hourly billing, clients are
-charged an agreed rate for each hour worked, with the operating profit built into this hourly rate. Often, a maximum fee
-cap is set for hourly billing projects (ACE, 2022).
+### Expenses
 
-These fee structures predominantly tie compensation to time spent rather than value created for the client, making it
-challenging to offer premium services based on quality or speed of design (Bernstein, 2018).
+Labor costs dominate the expenses of an architectural practice, with salaries and benefits often accounting for over 90% of total costs (Unger, 2018). In Poland, controlling labor cost becomes harder as the economy reaches advanced status and transitions away from competing with cheap labor. Since 2016, median wages in the private sector have increased by 85.3%, significantly outpacing the cumulative inflation of 56.7%. Given the positive economic outlook and a shrinking labor force, Polish labor costs are likely to continue rising (Piątkowski, 2023).
 
-Charge-out rates per employee type in selected European markets:
-| Country | Principals | Architects | Technologists |
-| --- | --- | --- | --- |
-| Poland | €18 | €11 | €6 |
-| Portugal | €46 | €34 | €25 |
-| Germany | €90 | €75 | €60 |
-| European average | €65 | €51 | €39 |
+The rising wages in general economy increase the opportunity cost of being an architect. This creates two effects: salaried architects demand higher wages, and top professionals leave for other industries when these demands are not met. Notably, due to the robust growth of the construction market and a low starting point, the median pay for architects has outpaced the national median (ACE, 2022 and GUS, 2024).
 
-Labor costs dominate the expenses of architectural practices, with salaries and benefits accounting for over 90% of 
-total costs (Unger, 2018). Since both revenue and labor costs typically increase proportionally with employment, 
-scaling up the business generally maintains a consistent operating margin. This means that when unit labor costs rise, 
-firms are forced to either increase their service prices or accept reduced profit margins.
+![alt text](img/wage_evolution_poland.png)
 
-Furthermore, the architectural services market in Poland is highly saturated and competitive. There are approximately 
-5,000 architectural practices in the country, with nearly 80% of these being sole-proprietor firms (ACE, 2022). This 
-high concentration of small firms intensifies competition in the market.
+### Profitability
 
-`add % of practices with 1, 2, 3-5 etc staff bar chart` 
+Rising labor costs have an adverse effect on the profitability of architectural practices. Moreover, negotiating higher fees is challenging in Poland's highly competitive architectural market. With approximately 5,070 architectural practices competing for a market worth €335 million, the average revenue rounds up to €66,000 per practice (ACE, 2022).
 
-| Country | Sole-proprietor | Partnership | Limited company | Public company | Other |
-| --- | --- | --- | --- | --- | --- |
-| Poland | 78 | 5 | 14 | 0 | 2 |
-| Portugal | 50 | 5 | 7 | 28 | 10 |
-| Germany | 66 | 14 | 12 | 0 | 8 |
-| European average | 66 | 7 | 18 | 3 | 5 |
+However, 72.7% of these practices have a single architect on staff, and the competition drives down the revenue in that segment of the market to only €25,256 per practice (ACE, 2022). This makes it difficult for small firms to pass rising costs onto clients and constrains their profit potential.
 
-Fierce competition creates downward pressure on prices, limiting firms' ability to pass rising costs onto clients.
-What makes it challenging for small firms is that they have smaller revenue backlogs, meaning that low operating margins
-pose an existential threat to their financial stability (Deltek, 2024). Consequently, the financial stability of a small
-architectural firm heavily depends on maintaining low labor costs.
+![alt text](img/architectural_practices_by_country_grouped_bar.png)
 
-As Poland's economy reaches advanced status, competing with cheap labor is no longer a viable growth model. Since 2016,
-median wages in the private sector have increased by 85.3%, significantly outpacing the cumulative inflation of 56.7%.
-Given the positive economic outlook and a shrinking labor force, Polish labor costs are likely to continue rising
-(Piątkowski, 2023).
+Given the compensation model and cost structure, profitability in architectural firms is often challenging. The labor-intensive nature of architectural work, combined with high competition and rising labor costs, can lead to tight margins, particularly for smaller practices. Additionally, smaller firms often have limited revenue backlogs, making low operating margins a more severe threat to their financial stability (Deltek, 2024). 
 
-The rising wages in other sectors increase the opportunity cost of being an architect. This creates two effects:
-salaried architects demand higher wages, and top professionals leave for other industries when these demands are not
-met. Notably, due to the robust growth of the construction market and a low starting point, the median pay for
-architects has outpaced the national median.
+### Outlook for the profession
 
-Running an architecture business also carries significant risks. Architectural firms often have a weaker position in
-contract negotiations. They typically lack dedicated operations staff and depend on a wide array of consultants to
-complete projects (Unger, 2018). Their services carry professional liability, which can lead to lawsuits years after
-project completion (Bernstein, 2018).
+Running an architecture business carries significant risk. Architectural firms oversee large and complicated projects, they often have a weaker position in contract negotiations and they depend on a wide array of consultants to complete projects (Unger, 2018). Moreover, their services carry professional liability, which can lead to costly lawsuits years after project completion (Bernstein, 2018). A higher risk profile demands higher margins to shelter businesses from liabilities, cash flow problems, and financial downturns.
 
-A higher risk profile demands higher margins to shelter businesses from liabilities, cash flow problems, and financial
-downturns. In practice, the average operating margin in most architecture firms ranges from 10% to 25% (Deltek, 2024).
-Moreover, as competition limits firms' ability to raise prices, while the job market constrains their capacity to lower
-labor costs, margins in Polish architectural practices may be trending downward. Operating margins falling below the
-average return from the capital market question the economic viability of small, independent architectural firms.
+As competition and labor market applies additional pressure on the margins of small architectural practices, their economic viability is questioned. Firms habitually earning less then the free-market return (long-term yield on goverment securities adjusted for risk of losing capital) will eventually go out of business (Porter, 1998). If external and internal pressures persist, the architectural services in Poland will likely consolidate, as only larger companies will be able to compete in a highly cyclical, commoditized market. In the United States, where a wave of mergers and acquisitions has already occurred in the architecture sector, consolidation led to improved cost management and operating margin raising to the average of 18% (Deltek, 2024). While beneficial for efficiency, market consolidation raises concerns for the future of architecture as a liberal profession (EESC, 2017).
 
-Current market trends consequently raise concerns over the future of architecture as a liberal profession (EESC, 2017).
-If these trends persist, the architectural services market in Poland will likely consolidate, as only larger companies
-will be able to compete. In the United States, where a wave of mergers and acquisitions has already occurred, this
-consolidation led to improved cost management and operating margin gains (Deltek, 2024).
+## Strategies for improving competitiveness
 
-This may also lead to growing vertical integration in the industry, as real estate developers and general contractors
-may want to incorporate discounted architectural practices into their organizations. The alignment of interests between
-designers, developers, and builders may actually lead to an increase in work quality and further encourage vertical
-integration (Bernstein, 2018).
+Given the market outlook, establising a competitive business model for sole-proprietor architectural practices is essential for their survival. Strategies for coping with competitive forces were categorized in a seminal work by Porter (1998) into three generic categories:
 
-### Call to action for the profession
+- Overall cost leadership - achieved by economies of scale and aggressive cost control
+- Differentiation - creating a perception of industry-wide unique service through brand, technology, customer experience etc.
+- Focus - targeting a particular buyer, segment or geographic market and serving them exceptionally well
 
-Given the challenging market outlook, that make charging more for services and reducing labor costs difficult, what
-kind of steps can a sole-proprietor architectural practice undertake? The main options are: bring in more
-business, specialize, expand services or improve technology and work processes.
+Porter argues that implementing a competitive strategy requires full organizational commitment and therefore only one strategy should be formulated and pursued. Whether or not they explicitly formulate a competitive strategy, architectural firms implement a common mix of tactics to improve their competitiveness.
 
-By definition small firms cannot compete with the scale of operations by themselves. But they can form consortia to
-share resources and take on more business without losing independence. In Poland, 34% of practices have a
-formal association with another practice, which hints at cooperation being a popular strategy (ACE, 2022).
+### Tactics for architectural practices
 
-In reality, collaboration can be challenging due to differences in management styles and architects' attachment to
-individual creativity. A recent public competition illustrates this difficulty. Eleven small architecture firms formed
-a collective to compete for a large museum project. However, the collaboration largely failed: the collective produced
-three competing proposals, two firms left the group, and one of these departing firms went on to win the competition
-individually. Only one collective proposal received recognition (Architektura & Biznes, 2022).
+In the context of architectural practice, firms can implement following tactics to improve their financial performance (Unger, 2018):
 
-Specialization offers another promising avenue for small architectural practices to enhance their market position 
-and potentially increase their pricing power. By focusing on a specific niche, firms can develop deep expertise, 
-differentiate themselves from competitors, and potentially command higher fees. This strategy allows small practices 
-to compete effectively against larger firms by offering specialized knowledge and services that may be outside the 
-scope of generalist practices.
+1. **Scale up** - Attract more clients and projects to boost overall revenue.
+2. **Specialize** - Increase pricing power by offering a unique value proposition.
+3. **Reduce costs** - Streamline operations and manage expenses, particularly labor costs.
+4. **Offer new services** - Develop additional revenue streams through complementary services.
+5. **Enhance labor productivity** - Implement efficient processes and technologies to increase output per employee.
+
+#### 1. Scale up
+
+Scaling up the operations can help spread the risk over many projects and ensure continued business, but is by definition challenging for small firms. The labor-intensity of architectural design requires significant investment in human resources which can be out of reach for sole-proprietor practices. Moreover, as argued earlier, increasing employment leads to proportional growth in both revenue and labor costs, which does not improve the margins.
+ 
+One potential strategy for small firms to compete on a larger scale is to form consortia, allowing them to share resources and bring in more business without losing independence. In Poland, 34% of practices have a formal association with another practice, suggesting that cooperation is a popular strategy (ACE, 2022). In the Chinese construction market, network strategy that fostered collaboration with competitors, long-term commitment and sharing resources was found to significantly correlate with profitability of firms (Li and Ling, 2012).
+
+However, in practice cooperation can be challenging due to differences in management styles and architects' attachment to individual creativity. Small firms may also lack the capacity to manage the additional burden of coordinating with others. A recent public competition illustrates these difficulties. Eleven small architecture firms formed a collective to compete for a large museum project, but the cooperation proved to be difficult. The collective produced three competing proposals, and two firms ultimately left the group. Ironically, one of these departing firms went on to win the competition individually, while only one collective proposal received recognition (Architektura & Biznes, 2022).
+
+#### 2. Specialize
+
+Specialization offers a promising avenue for small architectural practices to increase their pricing power. By focusing on a specific niche, firms can develop deep expertise, differentiate themselves from competitors, and potentially command higher fees. This tactic allows small practices to compete effectively against larger firms by offering specialized knowledge and services that may be outside the scope of generalist practice (Li and Ling, 2012).
 
 Some notable niches that small architectural firms might consider include:
 
-- Luxury residential: Catering to high-net-worth individuals with bespoke design services
-- Industrial architecture: Designing specialized facilities for manufacturing, logistics, or research
-- Healthcare architecture: Creating healing environments for hospitals, clinics, and medical offices
-- Adaptive reuse: Repurposing existing buildings for new functions, often with historical preservation considerations
-- Mass timber design: Specializing in sustainable wooden structures for various building types
-- Zero-energy design: Focusing on ultra-efficient buildings that produce as much energy as they consume
-- Facade engineering: Developing innovative building envelopes for improved performance and aesthetics
-- Architectural software development: Creating tools to enhance the design and management processes
+- **Luxury residential** - Catering to high-net-worth individuals with bespoke design services
+- **Specialized facility architecture** - Designing complex environments for industrial, healthcare, and educational purposes
+- **Adaptive reuse** - Repurposing buildings for new functions, often with historical preservation considerations
+- **Mass timber design** - Specializing in sustainable wooden structures
+- **Zero-energy design** - Focusing on ultra-energy-efficient buildings
+- **Facade engineering** - Developing building envelopes for other architects
+- **Architectural software development** - Creating tools to enhance the design and investment processes
 
+#### 3. Reduce costs
 
-The third approach to improving profitability is reducing labor costs, which poses challenges due to continuous upward
-pressure on wages. Outsourcing to countries with lower labor costs, a strategy employed in other industries like law
-and accounting, may prove to be problematic for small architecture firms. Varying regulations between countries make it
-difficult to find foreign expertise familiar with local requirements and increase quality control efforts. Flexible
-work arrangements with local freelancers offer a temporary solution, allowing firms to pay only for required labor.
-This approach has gained traction, especially in architectural visualization. However, as freelance costs will likely
-increase with overall economic growth, it may not provide a sustainable long-term strategy for managing costs and
-maintaining competitiveness.
+The financial stability of small architectural firms heavily relies on controlling labor costs, but the competitive job market makes reducing costs challenging. Still, practices can consider alternative tactics such as outsourcing or flexible work arrangements.
 
-These limitations of traditional cost-cutting methods point towards the need for a more radical approach to reducing
-labor-intensity in architectural practices. Automation emerges as a promising alternative to address the challenges of
-labor costs while potentially offering more sustainable and scalable benefits for small firms.
+Outsourcing to countries with cheaper labor markets, a common strategy in other professional services sectors like law and accounting, has a proven cost benefit. However, it presents unique challenges for small architecture firms. Differences in building regulations across countries make it difficult to find foreign expertise familiar with local requirements, and increase the effort required for quality assurance.
 
+Flexible work arrangements with local freelancers offer a solution, allowing firms to pay only for the labor they need. This approach has gained popularity, particularly in the field of architectural visualization. However, as freelance designers can be unreliable for business-critical tasks and their costs are likely to rise with overall economic growth, this may not be a sustainable long-term strategy for maintaining competitiveness.
 
-Expanding services offers a compelling strategy for small architectural firms to enhance their competitiveness in the
-market. By broadening their service offerings, these firms can create additional value for clients, differentiate
-themselves from competitors, and potentially increase their revenue streams. This approach allows small practices to
-leverage their existing expertise while addressing a wider range of client needs throughout the building lifecycle.
+#### 4. Offer new services
+
+Expanding services offers a compelling tactic for small architectural firms to enhance their competitiveness. By broadening their service offerings, these firms can create additional use value for clients, differentiate themselves from competitors, and create new revenue streams. This approach can be augmented by utilizing the rich design data produced in modern architectural practice to address a wider range of client needs throughout the building lifecycle (Bernstein, 2018).
 
 Traditional architectural services typically include:
 - Test fits and feasibility studies
@@ -170,17 +118,17 @@ Traditional architectural services typically include:
 - Permitting assistance
 - Construction observation
 
-However, firms can significantly enhance their market position by offering additional services such as:
+However, firms can significantly enhance their market position by offering additional services outside of the core architectural production phase:
 
-1. Pre-design services:
-   - Envisioning and goal-setting workshops
+- Pre-design services:
+   - Envisioning workshops
    - Strategic planning (e.g., masterplanning, workplace strategy)
    - Programming and space requirement analysis
    - Site selection and evaluation
    - Preliminary budgeting and cost estimation
    - Project scheduling and timeline development
 
-3. Post-design services:
+-  Post-design services:
    - Bidding and contractor selection assistance
    - Construction management
    - Interior design and fit-out services
@@ -190,21 +138,65 @@ However, firms can significantly enhance their market position by offering addit
 
 ![alt text](img/design_processes.png)
 
-By offering these expanded services, small architectural firms can:
-1. Increase client engagement and loyalty throughout the project lifecycle
-2. Generate additional revenue streams beyond traditional design fees
-3. Differentiate themselves in a competitive market
+However, it is important to note that small firms may traditionally lack the capacity to offer such a wide range of services due to limited human resources. This is where the potential of automation in reducing labor requirements for core design tasks becomes crucial. By using technology to streamline their design processes, small firms can free up valuable resources. This newfound capacity can then be redirected towards developing and offering these expanded services, allowing small architectural practices to compete more effectively.
 
-However, it is important to note that small firms may traditionally lack the capacity to offer such a wide range of
-services due to limited human resources. This is where the potential of automation in reducing labor requirements for
-core design tasks becomes crucial. By using technology and automation to streamline their design processes, small
-firms can free up valuable resources. This newfound capacity can then be redirected towards developing and offering these
-expanded services, allowing small architectural practices to compete more effectively.
+#### 5. Enhance labor productivity
+
+The construction industry, including architectural services, has significantly lagged in productivity growth compared to other sectors. McKinsey Global Institute (2017) reports that while many industries have seen productivity gains up to 1,500% since the 1940s, construction productivity has stagnated. For small architectural practices, wishing to carve their place on the market, enhancing labor productivity is an essential tactic. Key ways to increase the output per hour worked include:
+
+1. Training staff to enhance skills and knowledge
+2. Improving work processes for greater efficiency
+3. Investing in technology, particularly advanced automation tools
+
+First, training staff to be more knowledgeable and efficient equips employees with the latest industry knowledge, software proficiency, and best practices. Well-trained staff can work faster, make fewer errors, and produce higher-quality outputs. Moreover, ongoing training can boost employee engagement and retention, contributing to overall productivity and reducing costly turnover (Unger, 2018).
+
+Second, improving work processes can be particularly beneficial given the iterative nature of design work. Architecture involves cycles of refinement and revision, making it well suited for implementing adaptive processes. By introducing iterative workflows, firms can minimize work that has to be redone, reduce errors, and firmly include the client in the design process (Waszkiewicz, 2022). Additionally, facilitating smooth hand-offs between project phases through solid documentation and collaborative tools can significantly reduce time lost in transitions and improve overall productivity.
+
+Third, investment in technology can further enhance labor productivity by automating routine tasks, improving information reliability and enabling iterative workflows (Bernstein, 2018). Moreover, the combination of data-rich modelling and computation has the potential to significantly reduce the labor intensity of the design process. Given the recent advances in these areas, advanced automation will be one of the core tactics explored in this thesis.
+
+### Innovative business models in practice
+
+To explore the application of competitive strategies in architectural practice, three firms operating in an innovative business model were analyzed.
+
+#### 1. Ecologiq (Ekoinbud group)
+Strategy: overall cost leadership
+
+Client: public education (needs: easy procurement, low total cost (construction and maintenance), fast execution)
+
+Value proposition: design & build, prefabricated modular timber construction (fast, low operating costs)
+
+Expanded services: envisioning, programming, site selection, budgeting, bidding, construction, fit-out
+
+Ecologiq is a daughter company of Ekoinbud group, a general contractor operating in the construction market since 1998. Under the Ecologiq brand, the company offers the design & build service for prefabricated timber construction. The main clients are public institutions that want to build educational facilities, for which Ecologiq completed over 50 nursery, kindergarten and school projects.
+
+Ecologiq leverages their prefabricated timber technology to map directly onto the needs of public institutions. Public investors are constrained by strict procurement regulations and are often wary of completing the work during election cycles. They do not have the resources for construction management and as owners of the facilities they are sensitive to operating costs.
+
+Ecologiq's value proposition is to offer a design & build contract and guarantee fast execution and low operating costs thanks to prefabricated timber technology. They offer a comprehensive service that is sought after by public clients and allows them to manage costs by full control over the design and fabrication process.
+
+#### 2. Facit Technologies
+Strategy: Differentiation
+
+Client: private housing (needs: minimizing risk, unique design, fast execution)
+Value proposition: on-site fabrication technology, turnkey service, cost certainty
+Expanded services: programming, budgeting, construction, fit-out
+
+#### 3. Maka.studio
+Strategy: Focus
+
+Client: medical facilities
+Value proposition: medical design expertise, medical permitting assistance, medical technologist on staff
+Expanded services: site selection, budgeting, construction management
+
+Porter argues that choosing only one strategy and focusing all resources on it is the best way to gain a sustainable competitive advantage (Porter, 1998). Given the the small scale of sole-proprietor architectural firms, the focus strategy was chosen as the most relevant.
 
 
-## State-of-the-art
+Choosing buyers with low bargaining power and switching cost, high growth potential, (przedszkole git, ale moze prywatny dom opieki ma wyzszy growth potential).
 
-`examples (2-3) of successful firms operating in an innovative model`
+### Gaps in SotA = research problem
+### hypothesis
+### restate the aim
+
+
 
 ## Objectives
 
