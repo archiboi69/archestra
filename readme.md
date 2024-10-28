@@ -4,7 +4,7 @@
 
 ## Aim
 
-The aim of this thesis is to design a business model for a sole-proprietor architectural practice, using a focus competitive strategy, and to apply it in a retirement community test project.
+The aim of this thesis is to design a business model for a sole-proprietor architectural practice, using a focus competitive strategy and its corresponding tactics of specialization, new services and automation, and to evaluate it in a retirement community test project.
 
 ## Introduction
 
@@ -223,31 +223,40 @@ By concentrating on medical design niche, Maka.studio has positioned itself as a
 
 As these established companies have a different set of challanges to small architectural firms, the ability to directly apply their strategies to sole-proprietor practices is limited. The literature on the business models of small architectural practices is scarce, but Brejaart (2018) indicates that they have unique issues that revolve around finding clients, limited professional network and a fluid, not formally defined business model. In particular, they highlight the essential role that conciously designing a model that identifies the customers, value proposition, infrastructure and processes and revenue and cost structure has in survival of a business.
 
-***Therefore, the aim of this thesis is to design a sustainable business model for a sole-proprietor architectural practice, using a competitive strategy and its corresponding tactics and to evaluate its viability in a test case project.***
+***Therefore, the aim of this thesis is to design a sustainable business model for a sole-proprietor architectural practice, using a competitive strategy and its corresponding tactics and to evaluate it in a test case project.***
 
 
 
 ## Objectives
 
-Objectives of the thesis form the iterative research method. The first two strategize the business model and the next three form a feedback loop to delineate and continously improve the model:
+To realize the aim, the following objectives were set for the thesis:
 
 1. Choose a competitive strategy for a sole-proprietor architectural practice
-2. Discuss the tactics needed to implement the strategy
+2. Choose tactics needed to implement the strategy
 3. Design a competitive business model
 4. Evaluate the viability of the business model in a test case project
-5. Continously refine the business model based on the evaluation feedback
+5. Continuously refine the business model based on evaluation feedback
+
+Objectives form the iterative research method. The first two strategize the business model and the next three form a feedback loop to establish and continuously improve the business model as shown on the following diagram:
 
 ![alt text](img/research_process.png)
 
 ## Methods
 
+The methods section will present the argumentation for the choice of competitive strategy, the choice of implementation tactics and the design of the business model.
+
 ### Choice of competitive strategy
 
 As cost leadership and differentiation target industry-wide objectives that are better suited for larger organisations, the Author chose the focus strategy as the most promising avenue for an agile sole-proprietor practice to increase its competitiveness. The implication of this choice is that the business model will be tailored to the needs of a single customer segment, rather than seeking to appeal to a broad market.
 
-### Discussion of tactics
+### Choice of tactics
+
 
 Specialization, enhance labor productivity through advanced automation and offer new services 
+
+#### Specialization
+
+#### New services and automation
 
 ### Design of the business model
 
@@ -341,7 +350,7 @@ workflow.
 ![alt text](img/automated_processes.png)
 
 
-# Part II: Application of the business model
+# Part II: Evaluation of the business model
 
 ## Methods
 
