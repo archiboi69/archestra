@@ -1,6 +1,21 @@
 from app.programming import get_inputs
 from app.site_search import SiteSearch
+from app.development_conditions import DevelopmentConditions
 import geopandas as gpd
+
+def select_site(candidates):
+    """Allow user to select a site for further analysis"""
+    while True:
+        try:
+            print("\nEnter the number of the site you want to analyze (1-5), or 0 to exit:")
+            choice = int(input("Your choice: "))
+            if choice == 0:
+                return None
+            if 1 <= choice <= min(5, len(candidates)):
+                return candidates[choice - 1]
+            print("Invalid choice! Please select a number between 1 and 5.")
+        except ValueError:
+            print("Please enter a valid number!")
 
 def main():
     # Step 1: Get project requirements
@@ -18,7 +33,7 @@ def main():
     print("\n=== Step 2: Loading GIS Data ===")
     plots_gdf = gpd.read_file('data/GIS/2261_dzialki_egib_wfs_gml.gml')
     roads_gdf = gpd.read_file('data/GIS/2261_ulice_egib_wfs_gml.gml')
-    buildings_gdf = gpd.read_file('data/GIS/2261_budynki_egib_wfs_gml.gml')
+    buildings_gdf = gpd.read_file('data/GIS/budynki_2022.gpkg')
     churches_gdf = gpd.read_file('data/GIS/churches.gpkg')
     green_areas_gdf = gpd.read_file('data/GIS/green_areas.gpkg')
     noise_map_gdf = gpd.read_file('data/GIS/noise/noise_map.gpkg')
@@ -54,8 +69,8 @@ def main():
     # Step 4: Display Results
     print(f"\n=== Step 4: Found {len(candidates)} Potential Sites ===")
     if candidates:
-        print("\nTop 5 candidates:")
-        for i, candidate in enumerate(candidates[:5], 1):
+        print("\nTop 6 candidates:")
+        for i, candidate in enumerate(candidates[:6], 1):
             print(f"\n{i}. Plot {candidate.plot_id}")
             print(f"   Score: {candidate.score:.2f}")
             print(f"   Area: {candidate.area:.0f} sqm")
@@ -68,9 +83,93 @@ def main():
         # Step 5: Visualize Results
         print("\n=== Step 5: Generating Visualizations ===")
         site_search.visualize_candidates(candidates)
+        
+        # Step 6: Select Site for Development Analysis
+        print("\n=== Step 6: Select Site for Development Analysis ===")
+        selected_site = select_site(candidates)
+        if selected_site:
+            print(f"\nSelected Plot {selected_site.plot_id} for development analysis.")
+            print("\nSite Details:")
+            print(f"Area: {selected_site.area:.0f} sqm")
+            print(f"Shape index: {selected_site.shape_index:.2f}")
+            print(f"Score: {selected_site.score:.2f}")
+            
+            # Step 7: Analyze Development Conditions
+            print("\n=== Step 7: Analyzing Development Conditions ===")
+            development = DevelopmentConditions(
+                site_candidate=selected_site,
+                plots_gdf=plots_gdf,
+                roads_gdf=roads_gdf,
+                buildings_gdf=buildings_gdf
+            )
+            
+            try:
+                conditions = development.analyze()
+                print("\nDevelopment Conditions:")
+                print(f"Building Coverage Ratio: {conditions['coverage_ratio_min']:.2f} - {conditions['coverage_ratio_max']:.2f}")
+                print(f"Floor Area Ratio: {conditions['floor_area_ratio']:.2f}")
+                print(f"Maximum Height: {conditions['height']:.1f}m")
+                print(f"Front Width: {conditions['front_width']:.1f}m")
+                print(f"Setback: {conditions['setback']:.1f}m")
+                print(f"Frontage Length: {conditions['frontage_length']:.1f}m")
+                print(f"Analysis Radius: {conditions['analysis_radius']:.1f}m")
+                
+                # Add Requirements vs Conditions Summary
+                print("\n=== Requirements vs Development Conditions Summary ===")
+                print("\nGross Floor Area (GFA):")
+                print(f"Required: {gfa_range[0]:.0f} - {gfa_range[1]:.0f} m²")
+                print(f"Estimated: {conditions['estimated_gfa']:.0f} m²")
+                
+                # Check if estimated GFA meets requirements
+                if conditions['estimated_gfa'] < gfa_range[0]:
+                    print("WARNING: Estimated GFA is below minimum requirement!")
+                elif conditions['estimated_gfa'] > gfa_range[1]:
+                    print("WARNING: Estimated GFA exceeds maximum requirement!")
+                else:
+                    print("✓ Estimated GFA meets requirements")
+                
+                print("\nPlot Size:")
+                print(f"Required: {plot_range[0]:.0f} - {plot_range[1]:.0f} m²")
+                print(f"Actual: {conditions['site_area']:.0f} m²")
+                
+                # Check if plot size meets requirements
+                if conditions['site_area'] < plot_range[0]:
+                    print("WARNING: Plot is too small!")
+                elif conditions['site_area'] > plot_range[1]:
+                    print("WARNING: Plot is larger than necessary!")
+                else:
+                    print("✓ Plot size meets requirements")
+                
+                print("\nNumber of Stories:")
+                estimated_stories = conditions['height'] / 3.5  # Assuming 3.5m per story
+                print(f"Required: {retirement_home.stories}")
+                print(f"Estimated possible: {estimated_stories:.1f}")
+                
+                if estimated_stories < retirement_home.stories:
+                    print("WARNING: Height restrictions may not allow required number of stories!")
+                else:
+                    print("✓ Height allows required number of stories")
+                
+                # Visualize development conditions
+                print("\nGenerating development conditions visualization...")
+                development.visualize()
+                
+                return selected_site, conditions
+                
+            except ValueError as e:
+                print(f"\nError analyzing development conditions: {str(e)}")
+                print("Please select a different site.")
+                return None, None
+        else:
+            print("\nNo site selected for development analysis.")
+            return None, None
     else:
         print("\nNo suitable sites found with the given requirements.")
         print("Consider adjusting the project parameters and try again.")
+        return None, None
 
 if __name__ == "__main__":
-    main() 
+    selected_site, conditions = main()
+    
+    if selected_site and conditions:
+        print("\nSite selection and development conditions analysis complete.")

@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from typing import List, Optional
 from shapely.geometry import Polygon
 import rasterio
-from .models import RetirementHome, SiteConstraints, SitePenaltyWeights, SiteCandidate
+from .models import RetirementHome, SiteConstraints, SitePenaltyWeights, SiteCandidate, NormalizationRanges
 
 class SiteSearch:
     def __init__(self, 
@@ -36,15 +36,80 @@ class SiteSearch:
         
         # Apply hard constraints
         potential_sites = self._apply_hard_constraints()
+        if potential_sites.empty:
+            print("No potential sites found after applying hard constraints")
+            return []
+        print(f"\nFound {len(potential_sites)} sites after applying hard constraints")
         
-        # Calculate metrics and create candidates
-        for _, plot in potential_sites.iterrows():
+        # Create GeoDataFrame with centroids for efficient distance calculations
+        potential_centroids = gpd.GeoDataFrame(
+            geometry=potential_sites.geometry.centroid,
+            crs=potential_sites.crs
+        )
+        
+        # Calculate all distances efficiently using GeoSeries operations
+        print("\nCalculating distances...")
+        
+        # Green areas distances
+        green_distances = potential_centroids.geometry.apply(
+            lambda x: self.green_areas.distance(x).min()
+        )
+        print(f"Green areas distance range: {green_distances.min():.1f} - {green_distances.max():.1f} meters")
+        
+        # Church distances
+        church_distances = potential_centroids.geometry.apply(
+            lambda x: self.churches.distance(x).min()
+        )
+        print(f"Church distance range: {church_distances.min():.1f} - {church_distances.max():.1f} meters")
+        
+        # Calculate noise levels using spatial join
+        print("\nCalculating noise levels...")
+        noise_data = gpd.sjoin(
+            potential_sites[['geometry']],
+            self.noise_map[['geometry', 'min_noise']],
+            predicate='intersects'
+        )
+        noise_levels = noise_data.groupby(level=0)['min_noise'].mean().fillna(50)
+        print(f"Noise level range: {noise_levels.min():.1f} - {noise_levels.max():.1f} dB")
+        
+        # Calculate senior density for all points at once
+        print("\nCalculating senior density...")
+        with rasterio.open(self.senior_density_path) as src:
+            senior_densities = [
+                round(val[0], 1) 
+                for val in src.sample([(p.x, p.y) for p in potential_centroids.geometry])
+            ]
+        senior_series = pd.Series(senior_densities)
+        print(f"Senior density range: {senior_series.min():.1f}% - {senior_series.max():.1f}%")
+        
+        # Create normalization ranges
+        self.norm_ranges = NormalizationRanges(
+            min_green_distance=float(green_distances.min()),
+            max_green_distance=float(green_distances.max()),
+            min_church_distance=float(church_distances.min()),
+            max_church_distance=float(church_distances.max()),
+            min_noise=float(50),
+            max_noise=float(noise_levels.max()),
+            min_senior=float(senior_series.min()),
+            max_senior=float(senior_series.max())
+        )
+        
+        print("\nNormalization ranges:")
+        for field, value in self.norm_ranges.__dict__.items():
+            print(f"{field}: {value:.1f}")
+        
+        # Create candidates using the pre-calculated ranges
+        print("\nCreating candidates...")
+        for idx, plot in potential_sites.iterrows():
             candidate = self._create_candidate(plot)
             if candidate is not None:
                 candidates.append(candidate)
         
-        # Sort by score
+        # Sort by score in descending order (higher is better)
         candidates.sort(key=lambda x: x.score)
+        print(f"\nCreated {len(candidates)} valid candidates")
+        
+        
         return candidates
     
     def _apply_hard_constraints(self) -> gpd.GeoDataFrame:
@@ -60,35 +125,39 @@ class SiteSearch:
         shaped_plots = sized_plots[sized_plots['shape_index'] >= self.constraints.min_shape_index]
         
         # Filter out plots with residential buildings
-        residential_buildings = self.buildings[self.buildings['RODZAJ'] == 'm']
+        residential_buildings = self.buildings[self.buildings['FUNKCJA'] == 'budynki mieszkalne']
         plots_with_buildings = gpd.sjoin(
             shaped_plots, 
             residential_buildings, 
             how='inner',
-            rsuffix='_bldg'  # Add suffix for building columns
+            rsuffix='_bldg'
         )
-        empty_plots = shaped_plots[~shaped_plots.index.isin(plots_with_buildings.index)]
+        empty_plots = shaped_plots[~shaped_plots.index.isin(plots_with_buildings.index)].drop_duplicates(subset='gml_id')
         
         # Filter by road accessibility
+        # First join plots with roads
         road_plots = gpd.sjoin(
-            self.plots, 
-            self.roads, 
-            how='inner', 
+            self.plots,
+            self.roads,
+            how='inner',
             predicate='intersects',
-            rsuffix='_road'  # Add suffix for road columns
+            rsuffix='_road'
         )
         
+        # Then join with empty plots
         potential_sites = gpd.sjoin(
-            empty_plots, 
-            road_plots, 
-            how='inner', 
+            empty_plots,
+            road_plots,
+            how='inner',
             predicate='touches',
-            rsuffix='_roadplot'  # Add suffix for road plot columns
-        )
+            rsuffix='_roadplot'
+        ).drop_duplicates(subset='gml_id')  # Remove duplicates from second join
         
-        # Remove duplicates based on plot ID
-        potential_sites = potential_sites.drop_duplicates(subset='gml_id')
+        if potential_sites.empty:
+            print("No potential sites found after applying hard constraints")
+            return gpd.GeoDataFrame(columns=empty_plots.columns, crs=empty_plots.crs)
         
+        # Return deduplicated sites
         return potential_sites
     
     def _calculate_shape_index(self, geometry: Polygon) -> float:
@@ -104,9 +173,8 @@ class SiteSearch:
             candidate = SiteCandidate(
                 plot_id=plot['gml_id'],
                 geometry=plot.geometry,
-                area=plot.geometry.area,  # Calculate area directly from geometry
+                area=plot.geometry.area,
                 shape_index=plot['shape_index'],
-                distance_to_road=0  # Already filtered for road adjacency
             )
             
             # Calculate metrics
@@ -118,7 +186,7 @@ class SiteSearch:
                 plot.geometry.centroid, self.green_areas
             )
             
-            # Get noise level
+            # Get noise level and handle NaN values
             noise_intersections = gpd.sjoin(
                 gpd.GeoDataFrame(geometry=[plot.geometry], crs=self.noise_map.crs),
                 self.noise_map[['geometry', 'min_noise']],
@@ -132,8 +200,8 @@ class SiteSearch:
                 senior_density = list(src.sample([(centroid.x, centroid.y)]))[0][0]
                 candidate.senior_density = round(senior_density, 1)
             
-            # Calculate score
-            candidate.calculate_score(self.weights)
+            # Calculate score using pre-calculated ranges
+            candidate.calculate_score(self.weights, self.norm_ranges)
             
             return candidate
             
@@ -146,22 +214,26 @@ class SiteSearch:
         distances = [point.distance(geom) for geom in target_gdf.geometry]
         return round(min(distances))
     
-    def visualize_candidates(self, candidates: List[SiteCandidate], n_top: int = 5):
+    def visualize_candidates(self, candidates: List[SiteCandidate], n_top: int = 6):
         """Visualize top N candidates on a map"""
         # Create figure
         fig, ax = plt.subplots(figsize=(12, 8))
+        
+        # Convert penalties to percentage scores (0 penalty = 100%, 1 penalty = 0%)
+        display_scores = [(1 - c.score) * 100 for c in candidates]
         
         # Create GeoDataFrame from candidates
         candidate_gdf = gpd.GeoDataFrame(
             geometry=[c.geometry for c in candidates],
             data={
-                'score': [c.score for c in candidates],
+                'score': display_scores,
                 'plot_id': [c.plot_id for c in candidates]
-            }
+            },
+            crs=self.plots.crs
         )
         
         # Plot all candidates with transparency
-        for idx, candidate in enumerate(candidates):
+        for idx, (candidate, display_score) in enumerate(zip(candidates, display_scores)):
             color = 'red' if idx < n_top else 'gray'
             alpha = 0.8 if idx < n_top else 0.2
             gpd.GeoSeries([candidate.geometry]).plot(
@@ -174,7 +246,7 @@ class SiteSearch:
             if idx < n_top:
                 centroid = candidate.geometry.centroid
                 ax.annotate(
-                    f"#{idx+1}\nScore: {candidate.score:.2f}\n"
+                    f"#{idx+1}\nScore: {display_score:.0f}%\n"
                     f"Area: {candidate.area:.0f}m²\n"
                     f"Seniors: {candidate.senior_density:.1f}%",
                     xy=(centroid.x, centroid.y),
@@ -183,8 +255,13 @@ class SiteSearch:
                     fontsize=8
                 )
         
-        # Add basemap
-        ctx.add_basemap(ax, crs=candidate_gdf.crs)
+        # Add basemap with explicit CRS
+        ctx.add_basemap(
+            ax,
+            crs=self.plots.crs.to_string(),
+            source=ctx.providers.CartoDB.Positron
+        )
+        
         ax.set_axis_off()
         plt.title(f"Top {n_top} Site Candidates")
         plt.show()
@@ -240,7 +317,7 @@ class SiteSearch:
             ax.set_title(
                 f"Site {idx+1}\n"
                 f"Area: {candidate.area:.0f}m²\n"
-                f"Score: {candidate.score:.2f}\n"
+                f"Score: {(1 - candidate.score) * 100:.0f}%\n"
                 f"Noise: {candidate.noise_level:.0f}dB"
             )
             ax.set_axis_off()
