@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import contextily as ctx
 from shapely.geometry import Point, LineString
 from typing import Optional, List, Dict, Tuple
+import ezdxf
+from ezdxf.lldxf.const import MTEXT_MIDDLE_CENTER
 
 def get_road_neighbors(site_polygon, plots_gdf: gpd.GeoDataFrame, roads_gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     """Get neighboring plots that have significant road access (intersection > 1m)."""
@@ -168,6 +170,15 @@ def get_building_front_elevation(building_geom, road_side: LineString) -> LineSt
     result = LineString([point_start, point_end])
     print(f"  Resulting front elevation length: {result.length:.1f}m")
     return result
+
+def translate_points(points: List[Tuple[float, float]], dx: float, dy: float) -> List[Tuple[float, float]]:
+    """Translate a list of points by dx and dy."""
+    return [(x + dx, y + dy) for x, y in points]
+
+def get_translation_offset(geometry) -> Tuple[float, float]:
+    """Calculate translation offset to move geometry near origin."""
+    bounds = geometry.bounds  # Returns (minx, miny, maxx, maxy)
+    return -bounds[0], -bounds[1]
 
 class DevelopmentConditions:
     def __init__(self, site_candidate, plots_gdf: gpd.GeoDataFrame, roads_gdf: gpd.GeoDataFrame, buildings_gdf: gpd.GeoDataFrame):
@@ -426,3 +437,69 @@ class DevelopmentConditions:
         ctx.add_basemap(ax, crs=self.plots.crs)
         ax.set_axis_off()
         plt.show() 
+    
+    def export_to_dxf(self, filename: str):
+        """Export site and development conditions to DXF format."""
+        if not hasattr(self, 'plot_metrics'):
+            raise ValueError("Must run analyze() before exporting to DXF")
+        
+        # Create new DXF document
+        doc = ezdxf.new("R2000")
+        msp = doc.modelspace()
+        
+        # Calculate translation offset
+        dx, dy = get_translation_offset(self.site.geometry)
+        
+        # Create layers
+        doc.layers.add(name="SITE")  # Create layer first
+        site_layer = doc.layers.get("SITE")
+        site_layer.color = 1  # Then set color to red
+        
+        doc.layers.add(name="SETBACK")
+        setback_layer = doc.layers.get("SETBACK")
+        setback_layer.color = 5  # Blue
+        
+        doc.layers.add(name="METRICS")
+        metrics_layer = doc.layers.get("METRICS")
+        metrics_layer.color = 7  # White/Black
+        
+        # Draw site boundary
+        site_points = list(self.site.geometry.exterior.coords)
+        translated_site = translate_points(site_points, dx, dy)
+        site_polyline = msp.add_lwpolyline(translated_site)
+        site_polyline.dxf.layer = "SITE"
+        
+        # Draw setback area if available
+        conditions = self._calculate_zoning_conditions()
+        if self.road_side and pd.notna(conditions['setback']):
+            setback_area = self.site.geometry.intersection(
+                gpd.GeoSeries([self.road_side]).buffer(conditions['setback']).iloc[0]
+            )
+            if not setback_area.is_empty:
+                setback_points = list(setback_area.exterior.coords)
+                translated_setback = translate_points(setback_points, dx, dy)
+                setback_polyline = msp.add_lwpolyline(translated_setback)
+                setback_polyline.dxf.layer = "SETBACK"
+        
+        # Add metrics text
+        site_centroid = self.site.geometry.centroid
+        text_x, text_y = translate_points([(site_centroid.x, site_centroid.y)], dx, dy)[0]
+        
+        metrics_text = (
+            f"Development Metrics:\n"
+            f"BSC (Building Site Coverage): {conditions['coverage_ratio_max']:.2f}\n"
+            f"FAR (Floor Area Ratio): {conditions['floor_area_ratio']:.2f}\n"
+            f"W (Maximum Width): {conditions['front_width']:.1f}m\n"
+            f"H (Maximum Height): {conditions['height']:.1f}m\n"
+            f"Setback: {conditions['setback']:.1f}m\n"
+            f"Site Area: {conditions['site_area']:.1f}m²\n"
+            f"Estimated GFA: {conditions['estimated_gfa']:.1f}m²"
+        )
+        
+        text = msp.add_mtext(metrics_text)
+        text.dxf.layer = "METRICS"
+        text.dxf.char_height = 1.0  # Text height in drawing units
+        text.set_location((text_x, text_y), attachment_point=MTEXT_MIDDLE_CENTER)
+        
+        # Save the DXF file
+        doc.saveas(filename) 
