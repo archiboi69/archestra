@@ -6,7 +6,9 @@ import contextily as ctx
 from shapely.geometry import Point, LineString
 from typing import Optional, List, Dict, Tuple
 import ezdxf
-from ezdxf.lldxf.const import MTEXT_MIDDLE_CENTER
+from ezdxf.enums import TextEntityAlignment
+from ezdxf.addons import text2path
+from ezdxf.addons.text2path import Kind  # Import Kind enum
 
 def get_road_neighbors(site_polygon, plots_gdf: gpd.GeoDataFrame, roads_gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     """Get neighboring plots that have significant road access (intersection > 1m)."""
@@ -451,13 +453,17 @@ class DevelopmentConditions:
         dx, dy = get_translation_offset(self.site.geometry)
         
         # Create layers
-        doc.layers.add(name="SITE")  # Create layer first
+        doc.layers.add(name="SITE")
         site_layer = doc.layers.get("SITE")
-        site_layer.color = 1  # Then set color to red
+        site_layer.color = 1  # Red
         
         doc.layers.add(name="SETBACK")
         setback_layer = doc.layers.get("SETBACK")
         setback_layer.color = 5  # Blue
+        
+        doc.layers.add(name="OFFSET")  # New layer for offset
+        offset_layer = doc.layers.get("OFFSET")
+        offset_layer.color = 3  # Green
         
         doc.layers.add(name="METRICS")
         metrics_layer = doc.layers.get("METRICS")
@@ -468,6 +474,17 @@ class DevelopmentConditions:
         translated_site = translate_points(site_points, dx, dy)
         site_polyline = msp.add_lwpolyline(translated_site)
         site_polyline.dxf.layer = "SITE"
+        
+        # Add 4m inward offset
+        offset_geom = self.site.geometry.buffer(-4.0)
+        if not offset_geom.is_empty:
+            if offset_geom.geom_type == 'MultiPolygon':
+                # If we got multiple polygons, use the largest one
+                offset_geom = max(offset_geom.geoms, key=lambda x: x.area)
+            offset_points = list(offset_geom.exterior.coords)
+            translated_offset = translate_points(offset_points, dx, dy)
+            offset_polyline = msp.add_lwpolyline(translated_offset)
+            offset_polyline.dxf.layer = "OFFSET"
         
         # Draw setback area if available
         conditions = self._calculate_zoning_conditions()
@@ -485,21 +502,38 @@ class DevelopmentConditions:
         site_centroid = self.site.geometry.centroid
         text_x, text_y = translate_points([(site_centroid.x, site_centroid.y)], dx, dy)[0]
         
-        metrics_text = (
-            f"Development Metrics:\n"
-            f"BSC (Building Site Coverage): {conditions['coverage_ratio_max']:.2f}\n"
-            f"FAR (Floor Area Ratio): {conditions['floor_area_ratio']:.2f}\n"
-            f"W (Maximum Width): {conditions['front_width']:.1f}m\n"
-            f"H (Maximum Height): {conditions['height']:.1f}m\n"
-            f"Setback: {conditions['setback']:.1f}m\n"
-            f"Site Area: {conditions['site_area']:.1f}m²\n"
+        metrics = [
+            f"Development Metrics:",
+            f"BSC (Building Site Coverage): {conditions['coverage_ratio_max']:.2f}",
+            f"FAR (Floor Area Ratio): {conditions['floor_area_ratio']:.2f}",
+            f"W (Maximum Width): {conditions['front_width']:.1f}m",
+            f"H (Maximum Height): {conditions['height']:.1f}m",
+            f"Setback: {conditions['setback']:.1f}m",
+            f"Site Area: {conditions['site_area']:.1f}m²",
             f"Estimated GFA: {conditions['estimated_gfa']:.1f}m²"
-        )
+        ]
         
-        text = msp.add_mtext(metrics_text)
-        text.dxf.layer = "METRICS"
-        text.dxf.char_height = 1.0  # Text height in drawing units
-        text.set_location((text_x, text_y), attachment_point=MTEXT_MIDDLE_CENTER)
+        # Add each line as paths
+        line_height = 2.5  # Height between lines
+        
+        for i, line in enumerate(metrics):
+            # Create text entity first
+            text = msp.add_text(line)
+            text.dxf.layer = "METRICS"
+            text.dxf.height = 2.0  # Text height
+            text.set_placement(
+                (0, -i * line_height),  # insertion point
+                align=TextEntityAlignment.TOP_RIGHT  # alignment
+            )
+            
+            # Convert text entity to paths using LWPOLYLINES
+            paths = text2path.virtual_entities(text, kind=Kind.LWPOLYLINES)
+            
+            # Add paths to modelspace and remove original text
+            for entity in paths:
+                entity.dxf.layer = "METRICS"
+                msp.add_entity(entity)
+            msp.delete_entity(text)
         
         # Save the DXF file
         doc.saveas(filename) 

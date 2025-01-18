@@ -7,13 +7,13 @@ def select_site(candidates):
     """Allow user to select a site for further analysis"""
     while True:
         try:
-            print("\nEnter the number of the site you want to analyze (1-5), or 0 to exit:")
+            print("\nEnter the number of the site you want to analyze (1-6), or 0 to exit:")
             choice = int(input("Your choice: "))
             if choice == 0:
                 return None
-            if 1 <= choice <= min(5, len(candidates)):
+            if 1 <= choice <= min(6, len(candidates)):
                 return candidates[choice - 1]
-            print("Invalid choice! Please select a number between 1 and 5.")
+            print("Invalid choice! Please select a number between 1 and 6.")
         except ValueError:
             print("Please enter a valid number!")
 
@@ -114,7 +114,7 @@ def main():
                 print(f"Frontage Length: {conditions['frontage_length']:.1f}m")
                 print(f"Analysis Radius: {conditions['analysis_radius']:.1f}m")
                 
-                # Add Requirements vs Conditions Summary
+                # Add Requirements vs Development Conditions Summary
                 print("\n=== Requirements vs Development Conditions Summary ===")
                 print("\nGross Floor Area (GFA):")
                 print(f"Required: {gfa_range[0]:.0f} - {gfa_range[1]:.0f} m²")
@@ -153,6 +153,12 @@ def main():
                 # Visualize development conditions
                 print("\nGenerating development conditions visualization...")
                 development.visualize()
+                
+                # Export development conditions to DXF
+                print("\nExporting development conditions to DXF...")
+                output_file = f"output/site_{selected_site.plot_id}_conditions.dxf"
+                development.export_to_dxf(output_file)
+                print(f"DXF file saved to: {output_file}")
                 
                 return selected_site, conditions
                 

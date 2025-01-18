@@ -146,7 +146,7 @@ def calculate_space_requirements(home: RetirementHome) -> pd.DataFrame:
     ])
     
     # Social and activity spaces
-    for space_type in ["extrovert", "semi_private", "introvert", "exercise", "Workshop"]:
+    for space_type in ["extrovert", "semi_private", "introvert", "exercise", "workshop"]:
         min_area, area_per_resident = SPACE_REQUIREMENTS["per_resident_areas"][space_type][quality_level]
         total_area = max(min_area, resident_count * area_per_resident)
         spaces.append((
