@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from typing import List, Optional
 from shapely.geometry import Polygon
 import rasterio
-from .models import RetirementHome, SiteConstraints, SitePenaltyWeights, SiteCandidate, NormalizationRanges
+from ..models import RetirementHome, SiteConstraints, SitePenaltyWeights, SiteCandidate, NormalizationRanges
 
 class SiteSearch:
     def __init__(self, 
