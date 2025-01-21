@@ -20,30 +20,30 @@ def select_site(candidates):
 def main():
     # Step 1: Get project requirements
     print("\n=== Step 1: Define Project Requirements ===")
-    retirement_home = get_inputs()
-    gfa_range = retirement_home.calculate_gfa_range()
-    plot_range = retirement_home.calculate_plot_size_range()
+    program_data = get_inputs()
+    
+    # Calculate plot size range based on projected GFA
+    # Assuming FAR (Floor Area Ratio) range of 0.8 to 2.0
+    min_plot_size = program_data['projected_gfa'] / 2.0  # Maximum FAR scenario
+    max_plot_size = program_data['projected_gfa'] / 0.8  # Minimum FAR scenario
     
     print("\n=== Project Requirements Summary ===")
-    print(f"Residents: {retirement_home.min_residents} - {retirement_home.max_residents}")
-    print(f"Required GFA: {gfa_range[0]:.0f} - {gfa_range[1]:.0f} sqm")
-    print(f"Required Plot Size: {plot_range[0]:.0f} - {plot_range[1]:.0f} sqm")
+    print(f"Current GFA: {program_data['current_gfa']:.0f} sqm")
+    print(f"Projected GFA: {program_data['projected_gfa']:.0f} sqm")
+    print(f"Required Plot Size: {min_plot_size:.0f} - {max_plot_size:.0f} sqm")
     
     # Step 2: Load GIS data
     print("\n=== Step 2: Loading GIS Data ===")
-    plots_gdf = gpd.read_file('data/GIS/2261_dzialki_egib_wfs_gml.gml')
-    roads_gdf = gpd.read_file('data/GIS/2261_ulice_egib_wfs_gml.gml')
+    plots_gdf = gpd.read_file('data/GIS/EGIB/2261_dzialki_egib_wfs_gml.gml')
+    roads_gdf = gpd.read_file('data/GIS/EGIB/2261_ulice_egib_wfs_gml.gml')
     buildings_gdf = gpd.read_file('data/GIS/budynki_2022.gpkg')
-    churches_gdf = gpd.read_file('data/GIS/churches.gpkg')
     green_areas_gdf = gpd.read_file('data/GIS/green_areas.gpkg')
     noise_map_gdf = gpd.read_file('data/GIS/noise/noise_map.gpkg')
-    senior_density_path = 'data/GIS/old_heatmap.tif'
     
     # Ensure all data is in EPSG:2177
     plots_gdf.set_crs("EPSG:2177", inplace=True)
     roads_gdf.set_crs("EPSG:2177", inplace=True)
     buildings_gdf.set_crs("EPSG:2177", inplace=True)
-    churches_gdf = churches_gdf.to_crs("EPSG:2177")
     green_areas_gdf = green_areas_gdf.to_crs("EPSG:2177")
     noise_map_gdf = noise_map_gdf.to_crs("EPSG:2177")
     
@@ -53,15 +53,13 @@ def main():
         plots_gdf=plots_gdf,
         roads_gdf=roads_gdf,
         buildings_gdf=buildings_gdf,
-        churches_gdf=churches_gdf,
         green_areas_gdf=green_areas_gdf,
-        noise_map_gdf=noise_map_gdf,
-        senior_density_raster_path=senior_density_path
+        noise_map_gdf=noise_map_gdf
     )
     
     # Update constraints based on project requirements
-    site_search.constraints.min_plot_area = plot_range[0]
-    site_search.constraints.max_plot_area = plot_range[1]
+    site_search.constraints.min_plot_area = min_plot_size
+    site_search.constraints.max_plot_area = max_plot_size
     
     # Find and display candidates
     candidates = site_search.find_candidates()
@@ -76,9 +74,7 @@ def main():
             print(f"   Area: {candidate.area:.0f} sqm")
             print(f"   Shape index: {candidate.shape_index:.2f}")
             print(f"   Distance to nearest green area: {candidate.distance_to_nearest_green:.0f}m")
-            print(f"   Distance to nearest church: {candidate.distance_to_nearest_church:.0f}m")
             print(f"   Noise level: {candidate.noise_level:.0f} dB")
-            print(f"   Senior density: {candidate.senior_density:.1f}%")
         
         # Step 5: Visualize Results
         print("\n=== Step 5: Generating Visualizations ===")
@@ -117,38 +113,27 @@ def main():
                 # Add Requirements vs Development Conditions Summary
                 print("\n=== Requirements vs Development Conditions Summary ===")
                 print("\nGross Floor Area (GFA):")
-                print(f"Required: {gfa_range[0]:.0f} - {gfa_range[1]:.0f} m²")
-                print(f"Estimated: {conditions['estimated_gfa']:.0f} m²")
+                print(f"Current Required: {program_data['current_gfa']:.0f} m²")
+                print(f"Future Required: {program_data['projected_gfa']:.0f} m²")
+                print(f"Estimated Possible: {conditions['estimated_gfa']:.0f} m²")
                 
                 # Check if estimated GFA meets requirements
-                if conditions['estimated_gfa'] < gfa_range[0]:
-                    print("WARNING: Estimated GFA is below minimum requirement!")
-                elif conditions['estimated_gfa'] > gfa_range[1]:
-                    print("WARNING: Estimated GFA exceeds maximum requirement!")
+                if conditions['estimated_gfa'] < program_data['projected_gfa']:
+                    print("WARNING: Estimated GFA is below projected requirement!")
                 else:
-                    print("✓ Estimated GFA meets requirements")
+                    print("✓ Estimated GFA meets projected requirements")
                 
                 print("\nPlot Size:")
-                print(f"Required: {plot_range[0]:.0f} - {plot_range[1]:.0f} m²")
+                print(f"Required: {min_plot_size:.0f} - {max_plot_size:.0f} m²")
                 print(f"Actual: {conditions['site_area']:.0f} m²")
                 
                 # Check if plot size meets requirements
-                if conditions['site_area'] < plot_range[0]:
+                if conditions['site_area'] < min_plot_size:
                     print("WARNING: Plot is too small!")
-                elif conditions['site_area'] > plot_range[1]:
+                elif conditions['site_area'] > max_plot_size:
                     print("WARNING: Plot is larger than necessary!")
                 else:
                     print("✓ Plot size meets requirements")
-                
-                print("\nNumber of Stories:")
-                estimated_stories = conditions['height'] / 3.5  # Assuming 3.5m per story
-                print(f"Required: {retirement_home.stories}")
-                print(f"Estimated possible: {estimated_stories:.1f}")
-                
-                if estimated_stories < retirement_home.stories:
-                    print("WARNING: Height restrictions may not allow required number of stories!")
-                else:
-                    print("✓ Height allows required number of stories")
                 
                 # Visualize development conditions
                 print("\nGenerating development conditions visualization...")

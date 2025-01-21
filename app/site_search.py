@@ -5,26 +5,21 @@ import contextily as ctx
 import matplotlib.pyplot as plt
 from typing import List, Optional
 from shapely.geometry import Polygon
-import rasterio
-from .models import RetirementHome, SiteConstraints, SitePenaltyWeights, SiteCandidate, NormalizationRanges
+from .models import SiteConstraints, SitePenaltyWeights, SiteCandidate, NormalizationRanges
 
 class SiteSearch:
     def __init__(self, 
                  plots_gdf: gpd.GeoDataFrame,
                  roads_gdf: gpd.GeoDataFrame,
                  buildings_gdf: gpd.GeoDataFrame,
-                 churches_gdf: gpd.GeoDataFrame,
                  green_areas_gdf: gpd.GeoDataFrame,
-                 noise_map_gdf: gpd.GeoDataFrame,
-                 senior_density_raster_path: str):
+                 noise_map_gdf: gpd.GeoDataFrame):
         """Initialize with all required geodataframes for site search"""
         self.plots = plots_gdf
         self.roads = roads_gdf
         self.buildings = buildings_gdf
-        self.churches = churches_gdf
         self.green_areas = green_areas_gdf
         self.noise_map = noise_map_gdf
-        self.senior_density_path = senior_density_raster_path
         
         # Set default constraints and weights
         self.constraints = SiteConstraints()
@@ -56,12 +51,6 @@ class SiteSearch:
         )
         print(f"Green areas distance range: {green_distances.min():.1f} - {green_distances.max():.1f} meters")
         
-        # Church distances
-        church_distances = potential_centroids.geometry.apply(
-            lambda x: self.churches.distance(x).min()
-        )
-        print(f"Church distance range: {church_distances.min():.1f} - {church_distances.max():.1f} meters")
-        
         # Calculate noise levels using spatial join
         print("\nCalculating noise levels...")
         noise_data = gpd.sjoin(
@@ -72,26 +61,12 @@ class SiteSearch:
         noise_levels = noise_data.groupby(level=0)['min_noise'].mean().fillna(50)
         print(f"Noise level range: {noise_levels.min():.1f} - {noise_levels.max():.1f} dB")
         
-        # Calculate senior density for all points at once
-        print("\nCalculating senior density...")
-        with rasterio.open(self.senior_density_path) as src:
-            senior_densities = [
-                round(val[0], 1) 
-                for val in src.sample([(p.x, p.y) for p in potential_centroids.geometry])
-            ]
-        senior_series = pd.Series(senior_densities)
-        print(f"Senior density range: {senior_series.min():.1f}% - {senior_series.max():.1f}%")
-        
         # Create normalization ranges
         self.norm_ranges = NormalizationRanges(
             min_green_distance=float(green_distances.min()),
             max_green_distance=float(green_distances.max()),
-            min_church_distance=float(church_distances.min()),
-            max_church_distance=float(church_distances.max()),
             min_noise=float(50),
-            max_noise=float(noise_levels.max()),
-            min_senior=float(senior_series.min()),
-            max_senior=float(senior_series.max())
+            max_noise=float(noise_levels.max())
         )
         
         print("\nNormalization ranges:")
@@ -108,7 +83,6 @@ class SiteSearch:
         # Sort by score in descending order (higher is better)
         candidates.sort(key=lambda x: x.score)
         print(f"\nCreated {len(candidates)} valid candidates")
-        
         
         return candidates
     
@@ -135,7 +109,6 @@ class SiteSearch:
         empty_plots = shaped_plots[~shaped_plots.index.isin(plots_with_buildings.index)].drop_duplicates(subset='gml_id')
         
         # Filter by road accessibility
-        # First join plots with roads
         road_plots = gpd.sjoin(
             self.plots,
             self.roads,
@@ -144,20 +117,18 @@ class SiteSearch:
             rsuffix='_road'
         )
         
-        # Then join with empty plots
         potential_sites = gpd.sjoin(
             empty_plots,
             road_plots,
             how='inner',
             predicate='touches',
             rsuffix='_roadplot'
-        ).drop_duplicates(subset='gml_id')  # Remove duplicates from second join
+        ).drop_duplicates(subset='gml_id')
         
         if potential_sites.empty:
             print("No potential sites found after applying hard constraints")
             return gpd.GeoDataFrame(columns=empty_plots.columns, crs=empty_plots.crs)
         
-        # Return deduplicated sites
         return potential_sites
     
     def _calculate_shape_index(self, geometry: Polygon) -> float:
@@ -178,10 +149,6 @@ class SiteSearch:
             )
             
             # Calculate metrics
-            candidate.distance_to_nearest_church = self._calculate_distance_to_nearest(
-                plot.geometry.centroid, self.churches
-            )
-            
             candidate.distance_to_nearest_green = self._calculate_distance_to_nearest(
                 plot.geometry.centroid, self.green_areas
             )
@@ -193,12 +160,6 @@ class SiteSearch:
                 predicate='intersects'
             )
             candidate.noise_level = noise_intersections['min_noise'].mean() if not noise_intersections.empty else 50
-            
-            # Get senior density
-            with rasterio.open(self.senior_density_path) as src:
-                centroid = plot.geometry.centroid
-                senior_density = list(src.sample([(centroid.x, centroid.y)]))[0][0]
-                candidate.senior_density = round(senior_density, 1)
             
             # Calculate score using pre-calculated ranges
             candidate.calculate_score(self.weights, self.norm_ranges)
@@ -247,8 +208,7 @@ class SiteSearch:
                 centroid = candidate.geometry.centroid
                 ax.annotate(
                     f"#{idx+1}\nScore: {display_score:.0f}%\n"
-                    f"Area: {candidate.area:.0f}m²\n"
-                    f"Seniors: {candidate.senior_density:.1f}%",
+                    f"Area: {candidate.area:.0f}m²",
                     xy=(centroid.x, centroid.y),
                     ha='center',
                     va='center',
@@ -295,15 +255,12 @@ class SiteSearch:
             plots_in_view = self.plots[self.plots.intersects(buffer)]
             buildings_in_view = self.buildings[self.buildings.intersects(buffer)]
             green_in_view = self.green_areas[self.green_areas.intersects(buffer)]
-            churches_in_view = self.churches[self.churches.intersects(buffer)]
             
             # Plot layers
             noise_in_view.plot(ax=ax, cmap='Reds', alpha=0.3)
             plots_in_view.plot(ax=ax, color='lightgrey', edgecolor='black', alpha=0.3)
             buildings_in_view.plot(ax=ax, color='lightgrey', edgecolor='black', alpha=0.3)
             green_in_view.plot(ax=ax, color='green', alpha=0.3)
-            if not churches_in_view.empty:
-                churches_in_view.plot(ax=ax, color='blue', marker='+', markersize=100)
             
             # Highlight the candidate site
             site_gdf = gpd.GeoDataFrame(geometry=[candidate.geometry], crs=self.plots.crs)
