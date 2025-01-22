@@ -13,13 +13,19 @@ class SiteSearch:
                  roads_gdf: gpd.GeoDataFrame,
                  buildings_gdf: gpd.GeoDataFrame,
                  green_areas_gdf: gpd.GeoDataFrame,
-                 noise_map_gdf: gpd.GeoDataFrame):
+                 noise_map_gdf: gpd.GeoDataFrame,
+                 bus_tram_stops_gdf: gpd.GeoDataFrame,
+                 train_stops_gdf: gpd.GeoDataFrame,
+                 airport_gdf: gpd.GeoDataFrame):
         """Initialize with all required geodataframes for site search"""
         self.plots = plots_gdf
         self.roads = roads_gdf
         self.buildings = buildings_gdf
         self.green_areas = green_areas_gdf
         self.noise_map = noise_map_gdf
+        self.bus_tram_stops = bus_tram_stops_gdf
+        self.train_stops = train_stops_gdf
+        self.airport = airport_gdf
         
         # Set default constraints and weights
         self.constraints = SiteConstraints()
@@ -61,12 +67,36 @@ class SiteSearch:
         noise_levels = noise_data.groupby(level=0)['min_noise'].mean().fillna(50)
         print(f"Noise level range: {noise_levels.min():.1f} - {noise_levels.max():.1f} dB")
         
+        print("\nCalculating transportation accessibility...")
+        
+        # Calculate distances to different transport modes
+        bus_tram_distances = potential_centroids.geometry.apply(
+            lambda x: self.bus_tram_stops.distance(x).min()
+        )
+        print(f"Bus/Tram distance range: {bus_tram_distances.min():.1f} - {bus_tram_distances.max():.1f} meters")
+        
+        train_distances = potential_centroids.geometry.apply(
+            lambda x: self.train_stops.distance(x).min()
+        )
+        print(f"Train distance range: {train_distances.min():.1f} - {train_distances.max():.1f} meters")
+        
+        airport_distances = potential_centroids.geometry.apply(
+            lambda x: self.airport.distance(x).min()
+        )
+        print(f"Airport distance range: {airport_distances.min():.1f} - {airport_distances.max():.1f} meters")
+        
         # Create normalization ranges
         self.norm_ranges = NormalizationRanges(
             min_green_distance=float(green_distances.min()),
             max_green_distance=float(green_distances.max()),
             min_noise=float(50),
-            max_noise=float(noise_levels.max())
+            max_noise=float(noise_levels.max()),
+            min_bus_tram_distance=float(bus_tram_distances.min()),
+            max_bus_tram_distance=float(bus_tram_distances.max()),
+            min_train_distance=float(train_distances.min()),
+            max_train_distance=float(train_distances.max()),
+            min_airport_distance=float(airport_distances.min()),
+            max_airport_distance=float(airport_distances.max())
         )
         
         print("\nNormalization ranges:")
@@ -140,7 +170,6 @@ class SiteSearch:
     def _create_candidate(self, plot: gpd.GeoSeries) -> Optional[SiteCandidate]:
         """Create a SiteCandidate from a plot with all metrics calculated"""
         try:
-            # Create base candidate
             candidate = SiteCandidate(
                 plot_id=plot['gml_id'],
                 geometry=plot.geometry,
@@ -149,11 +178,24 @@ class SiteSearch:
             )
             
             # Calculate metrics
+            centroid = plot.geometry.centroid
+            
             candidate.distance_to_nearest_green = self._calculate_distance_to_nearest(
-                plot.geometry.centroid, self.green_areas
+                centroid, self.green_areas
             )
             
-            # Get noise level and handle NaN values
+            # Calculate transportation distances
+            candidate.distance_to_bus_tram = self._calculate_distance_to_nearest(
+                centroid, self.bus_tram_stops
+            )
+            candidate.distance_to_train = self._calculate_distance_to_nearest(
+                centroid, self.train_stops
+            )
+            candidate.distance_to_airport = self._calculate_distance_to_nearest(
+                centroid, self.airport
+            )
+            
+            # Get noise level
             noise_intersections = gpd.sjoin(
                 gpd.GeoDataFrame(geometry=[plot.geometry], crs=self.noise_map.crs),
                 self.noise_map[['geometry', 'min_noise']],
@@ -255,12 +297,23 @@ class SiteSearch:
             plots_in_view = self.plots[self.plots.intersects(buffer)]
             buildings_in_view = self.buildings[self.buildings.intersects(buffer)]
             green_in_view = self.green_areas[self.green_areas.intersects(buffer)]
+            bus_tram_in_view = self.bus_tram_stops[self.bus_tram_stops.intersects(buffer)]
+            train_in_view = self.train_stops[self.train_stops.intersects(buffer)]
+            airport_in_view = self.airport[self.airport.intersects(buffer)]
             
             # Plot layers
             noise_in_view.plot(ax=ax, cmap='Reds', alpha=0.3)
             plots_in_view.plot(ax=ax, color='lightgrey', edgecolor='black', alpha=0.3)
             buildings_in_view.plot(ax=ax, color='lightgrey', edgecolor='black', alpha=0.3)
             green_in_view.plot(ax=ax, color='green', alpha=0.3)
+            
+            # Plot transport stops with different markers
+            if not bus_tram_in_view.empty:
+                bus_tram_in_view.plot(ax=ax, color='blue', marker='s', markersize=30, alpha=0.7, label='Bus/Tram Stop')
+            if not train_in_view.empty:
+                train_in_view.plot(ax=ax, color='purple', marker='^', markersize=50, alpha=0.7, label='Train Station')
+            if not airport_in_view.empty:
+                airport_in_view.plot(ax=ax, color='red', marker='*', markersize=100, alpha=0.7, label='Airport')
             
             # Highlight the candidate site
             site_gdf = gpd.GeoDataFrame(geometry=[candidate.geometry], crs=self.plots.crs)
@@ -270,13 +323,24 @@ class SiteSearch:
             ax.set_xlim(buffer.bounds[0], buffer.bounds[2])
             ax.set_ylim(buffer.bounds[1], buffer.bounds[3])
             
-            # Add title with metrics
+            # Add title with metrics including transport distances
             ax.set_title(
                 f"Site {idx+1}\n"
                 f"Area: {candidate.area:.0f}m²\n"
                 f"Score: {(1 - candidate.score) * 100:.0f}%\n"
-                f"Noise: {candidate.noise_level:.0f}dB"
+                f"Noise: {candidate.noise_level:.0f}dB\n"
+                f"Bus/Tram: {candidate.distance_to_bus_tram:.0f}m\n"
+                f"Train: {candidate.distance_to_train:.0f}m\n"
+                f"Airport: {candidate.distance_to_airport/1000:.1f}km",
+                fontsize=8
             )
+            
+            # Add legend if transport stops are visible
+            if (not bus_tram_in_view.empty or 
+                not train_in_view.empty or 
+                not airport_in_view.empty):
+                ax.legend(loc='lower left', fontsize=6)
+            
             ax.set_axis_off()
         
         # Remove empty subplots

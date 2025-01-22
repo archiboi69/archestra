@@ -461,13 +461,68 @@ class DevelopmentConditions:
         setback_layer = doc.layers.get("SETBACK")
         setback_layer.color = 5  # Blue
         
-        doc.layers.add(name="OFFSET")  # New layer for offset
+        doc.layers.add(name="OFFSET")
         offset_layer = doc.layers.get("OFFSET")
         offset_layer.color = 3  # Green
         
         doc.layers.add(name="METRICS")
         metrics_layer = doc.layers.get("METRICS")
         metrics_layer.color = 7  # White/Black
+        
+        doc.layers.add(name="NEIGHBOR_PLOTS")
+        neighbor_layer = doc.layers.get("NEIGHBOR_PLOTS")
+        neighbor_layer.color = 8  # Gray
+        
+        doc.layers.add(name="BUILDINGS")
+        buildings_layer = doc.layers.get("BUILDINGS")
+        buildings_layer.color = 6  # Magenta
+        
+        # Get neighboring plots within analysis radius
+        buffer_distance = self.analysis_radius
+        buffer_area = self.site.geometry.buffer(buffer_distance)
+        neighbor_plots = self.plots[self.plots.geometry.intersects(buffer_area)]
+        
+        # Get buildings within the same area
+        neighbor_buildings = self.buildings[self.buildings.geometry.intersects(buffer_area)]
+        
+        # Draw neighboring plots
+        for _, plot in neighbor_plots.iterrows():
+            if not plot.geometry.equals(self.site.geometry):  # Skip the site itself
+                plot_points = list(plot.geometry.exterior.coords)
+                translated_points = translate_points(plot_points, dx, dy)
+                plot_polyline = msp.add_lwpolyline(translated_points)
+                plot_polyline.dxf.layer = "NEIGHBOR_PLOTS"
+        
+        # Draw buildings
+        for _, building in neighbor_buildings.iterrows():
+            # Handle both Polygon and MultiPolygon geometries
+            if building.geometry.geom_type == 'MultiPolygon':
+                # Draw each polygon in the MultiPolygon
+                for polygon in building.geometry.geoms:
+                    building_points = list(polygon.exterior.coords)
+                    translated_points = translate_points(building_points, dx, dy)
+                    building_polyline = msp.add_lwpolyline(translated_points)
+                    building_polyline.dxf.layer = "BUILDINGS"
+                    
+                    # Draw interior rings (holes) if any
+                    for interior in polygon.interiors:
+                        interior_points = list(interior.coords)
+                        translated_interior = translate_points(interior_points, dx, dy)
+                        interior_polyline = msp.add_lwpolyline(translated_interior)
+                        interior_polyline.dxf.layer = "BUILDINGS"
+            else:
+                # Handle single Polygon
+                building_points = list(building.geometry.exterior.coords)
+                translated_points = translate_points(building_points, dx, dy)
+                building_polyline = msp.add_lwpolyline(translated_points)
+                building_polyline.dxf.layer = "BUILDINGS"
+                
+                # Draw interior rings (holes) if any
+                for interior in building.geometry.interiors:
+                    interior_points = list(interior.coords)
+                    translated_interior = translate_points(interior_points, dx, dy)
+                    interior_polyline = msp.add_lwpolyline(translated_interior)
+                    interior_polyline.dxf.layer = "BUILDINGS"
         
         # Draw site boundary
         site_points = list(self.site.geometry.exterior.coords)
@@ -479,14 +534,13 @@ class DevelopmentConditions:
         offset_geom = self.site.geometry.buffer(-4.0)
         if not offset_geom.is_empty:
             if offset_geom.geom_type == 'MultiPolygon':
-                # If we got multiple polygons, use the largest one
                 offset_geom = max(offset_geom.geoms, key=lambda x: x.area)
             offset_points = list(offset_geom.exterior.coords)
             translated_offset = translate_points(offset_points, dx, dy)
             offset_polyline = msp.add_lwpolyline(translated_offset)
             offset_polyline.dxf.layer = "OFFSET"
         
-        # Draw setback area if available
+        # Draw setback area
         conditions = self._calculate_zoning_conditions()
         if self.road_side and pd.notna(conditions['setback']):
             setback_area = self.site.geometry.intersection(
@@ -498,42 +552,38 @@ class DevelopmentConditions:
                 setback_polyline = msp.add_lwpolyline(translated_setback)
                 setback_polyline.dxf.layer = "SETBACK"
         
-        # Add metrics text
-        site_centroid = self.site.geometry.centroid
-        text_x, text_y = translate_points([(site_centroid.x, site_centroid.y)], dx, dy)[0]
+        # Calculate actual areas from ratios
+        max_building_footprint = conditions['site_area'] * conditions['coverage_ratio_max']
+        max_gfa = conditions['site_area'] * conditions['floor_area_ratio']
         
         metrics = [
             f"Development Metrics:",
             f"BSC (Building Site Coverage): {conditions['coverage_ratio_max']:.2f}",
+            f"BSC Area: {max_building_footprint:.1f}m² max footprint",
             f"FAR (Floor Area Ratio): {conditions['floor_area_ratio']:.2f}",
+            f"FAR Area: {max_gfa:.1f}m² max GFA",
             f"W (Maximum Width): {conditions['front_width']:.1f}m",
             f"H (Maximum Height): {conditions['height']:.1f}m",
             f"Setback: {conditions['setback']:.1f}m",
             f"Site Area: {conditions['site_area']:.1f}m²",
-            f"Estimated GFA: {conditions['estimated_gfa']:.1f}m²"
         ]
         
-        # Add each line as paths
-        line_height = 2.5  # Height between lines
-        
+        # Add metrics text
+        line_height = 2.5
         for i, line in enumerate(metrics):
             # Create text entity first
             text = msp.add_text(line)
             text.dxf.layer = "METRICS"
-            text.dxf.height = 2.0  # Text height
+            text.dxf.height = 2.0
             text.set_placement(
-                (0, -i * line_height),  # insertion point
-                align=TextEntityAlignment.TOP_RIGHT  # alignment
+                (0, -i * line_height),
+                align=TextEntityAlignment.TOP_RIGHT
             )
             
-            # Convert text entity to paths using LWPOLYLINES
             paths = text2path.virtual_entities(text, kind=Kind.LWPOLYLINES)
-            
-            # Add paths to modelspace and remove original text
             for entity in paths:
                 entity.dxf.layer = "METRICS"
                 msp.add_entity(entity)
             msp.delete_entity(text)
         
-        # Save the DXF file
         doc.saveas(filename) 

@@ -88,60 +88,112 @@ def calculate_space_requirements(departments, special_uses):
     spaces = []
     total_staff = 0
     
-    # Calculate office spaces by department
+    # Calculate office spaces by department and total staff
     for dept_name, positions in departments.items():
         for position, details in positions.items():
             current_count = details["count"]
-            future_count = current_count + details["projected_growth"]
             office_type = details["type"]
             area = OFFICE_STANDARDS[office_type]
+            total_staff += current_count  # Add to total staff count
+            
+            # Define standard dimensions based on office type
+            dimensions = {
+                "A": {"width": 5.0, "depth": 5.0},  # Executive 25m²
+                "B": {"width": 5.0, "depth": 3.0},  # Senior manager 15m²
+                "C": {"width": 4.0, "depth": 3.0},  # Manager 12m²
+                "D": {"width": 3.2, "depth": 2.5},  # Standard enclosed 8m²
+                "E": {"width": 3.0, "depth": 2.0}   # Open plan 6m²
+            }
             
             spaces.append({
-                "Program Name": f"{dept_name} - {position}",
-                "Space Count Current": current_count,
-                "Space Count Projected": future_count,
+                "Department": dept_name,
+                "Program Name": position,
+                "Space Count": current_count,
                 "Area per Space": area,
-                "Total Area Current": current_count * area,
-                "Total Area Projected": future_count * area,
-                "Space Type": "Office"
+                "Width": dimensions[office_type]["width"],
+                "Depth": dimensions[office_type]["depth"],
+                "Color": "#FFE4B5"  # Standard office color
             })
-            total_staff += future_count
 
-    # Calculate support spaces
+    # Calculate support spaces based on total staff
     for space_name, specs in SUPPORT_SPACES.items():
         if "ratio" in specs:
             count = max(1, int(total_staff * specs["ratio"]))
         else:
             count = specs["count"]
             
-        spaces.append({
+        # Define dimensions for support spaces where relevant
+        support_dimensions = {
+            "Board Room": {"width": 8.0, "depth": 6.25},
+            "Board Room Ante Room": {"width": 5.0, "depth": 3.0},
+            "Board Room Private Toilet": {"width": 2.25, "depth": 2.0},
+            "Board Room Pantry": {"width": 4.0, "depth": 2.0},
+            "Conference Room Large": {"width": 6.0, "depth": 5.0},
+            "Conference Room Small": {"width": 5.0, "depth": 4.0},
+            "Copy Rooms": {"width": 5.0, "depth": 3.0},
+            "Server Room": {"width": 5.0, "depth": 4.0}
+        }
+        
+        space_data = {
+            "Department": "Support",
             "Program Name": space_name,
-            "Space Count Current": count,
-            "Space Count Projected": count,
+            "Space Count": count,
             "Area per Space": specs["area"],
-            "Total Area Current": count * specs["area"],
-            "Total Area Projected": count * specs["area"],
-            "Space Type": "Support"
-        })
+            "Color": "#E6E6FA"  # Light support space color
+        }
+        
+        # Add dimensions if available
+        if space_name in support_dimensions:
+            space_data["Width"] = support_dimensions[space_name]["width"]
+            space_data["Depth"] = support_dimensions[space_name]["depth"]
+            
+        spaces.append(space_data)
 
     # Add special uses
     for space_name, quantity in special_uses.items():
-        if quantity["current"] > 0 or quantity["projected"] > 0:
-            spaces.append({
+        if quantity["current"] > 0:
+            # Define dimensions for special spaces
+            special_dimensions = {
+                "Training Room": {"width": 8.0, "depth": 5.0},
+                "Conference Center": {"width": 10.0, "depth": 10.0},
+                "Gym": {"width": 10.0, "depth": 8.0},
+                "Cafeteria": {"width": 12.0, "depth": 10.0},
+                "Archive": {"width": 6.0, "depth": 5.0}
+            }
+            
+            space_data = {
+                "Department": "Special",
                 "Program Name": space_name,
-                "Space Count Current": quantity["current"],
-                "Space Count Projected": quantity["projected"],
+                "Space Count": quantity["current"],
                 "Area per Space": SPECIAL_USES[space_name]["area"],
-                "Total Area Current": quantity["current"] * SPECIAL_USES[space_name]["area"],
-                "Total Area Projected": quantity["projected"] * SPECIAL_USES[space_name]["area"],
-                "Space Type": "Special"
-            })
+                "Color": "#98FB98"  # Light green for special spaces
+            }
+            
+            # Add dimensions if available
+            if space_name in special_dimensions:
+                space_data["Width"] = special_dimensions[space_name]["width"]
+                space_data["Depth"] = special_dimensions[space_name]["depth"]
+                
+            spaces.append(space_data)
 
-    return pd.DataFrame(spaces)
+    # Create DataFrame without circulation
+    df = pd.DataFrame(spaces)
+    
+    # Calculate total areas
+    df['Total Area'] = df['Space Count'] * df['Area per Space']
+    
+    return df
 
 def save_space_program(df, output_path):
     """Save space program to CSV file"""
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    
+    # Ensure columns are in the desired order
+    columns = ["Department", "Program Name", "Space Count", "Area per Space", "Color"]
+    if "Width" in df.columns:
+        columns.extend(["Width", "Depth"])
+    
+    df = df[columns]
     df.to_csv(output_path, index=False)
     return df
 
@@ -206,15 +258,17 @@ def get_inputs():
     print(f"\nSpace program saved to: {output_path}")
     
     # Summary statistics
-    current_total = space_program["Total Area Current"].sum()
-    projected_total = space_program["Total Area Projected"].sum()
+    net_area = space_program['Total Area'].sum()
+    circulation_area = net_area * 0.4  # 40% circulation
+    total_gfa = net_area + circulation_area
     
-    print(f"\nTotal Current GFA: {current_total:.1f}m²")
-    print(f"Total Projected GFA: {projected_total:.1f}m²")
+    print(f"\nNet Area: {net_area:.1f}m²")
+    print(f"Circulation Area (40%): {circulation_area:.1f}m²")
+    print(f"Total GFA: {total_gfa:.1f}m²")
     
     return {
         "version": version,
-        "current_gfa": current_total,
-        "projected_gfa": projected_total,
+        "current_gfa": total_gfa,
+        "projected_gfa": total_gfa * 1.15,  # Adding 15% for future growth
         "space_program": space_program
     }

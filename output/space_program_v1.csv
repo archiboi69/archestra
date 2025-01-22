@@ -1,43 +1,43 @@
-Program Name,Space Count Current,Space Count Projected,Area per Space,Total Area Current,Total Area Projected,Space Type
-Executive - CEO,1,1,25.0,25.0,25.0,Office
-Executive - CEO Admin Assistant,1,1,8.0,8.0,8.0,Office
-Executive - President,1,1,25.0,25.0,25.0,Office
-Executive - President Admin Assistant,1,1,8.0,8.0,8.0,Office
-Executive - CFO,1,1,25.0,25.0,25.0,Office
-Executive - CFO Admin Assistant,1,1,8.0,8.0,8.0,Office
-Finance - VP Finance,1,1,15.0,15.0,15.0,Office
-Finance - Director of Finance,1,1,15.0,15.0,15.0,Office
-Finance - Accountants,4,6,6.0,24.0,36.0,Office
-Marketing - VP Marketing,1,1,15.0,15.0,15.0,Office
-Marketing - Administrative Assistant,1,1,8.0,8.0,8.0,Office
-Marketing - Analysts,3,5,6.0,18.0,30.0,Office
-Marketing - Product Leaders,2,3,12.0,24.0,36.0,Office
-Real Estate - VP Real Estate,1,1,15.0,15.0,15.0,Office
-Real Estate - Administrative Assistant,1,1,8.0,8.0,8.0,Office
-Real Estate - Leasing Coordinators,2,3,12.0,24.0,36.0,Office
-Real Estate - Lease Administration,2,3,6.0,12.0,18.0,Office
-Planning - VP Planning and Design,1,1,15.0,15.0,15.0,Office
-Planning - Sr. Project Manager,1,2,12.0,12.0,24.0,Office
-Planning - Project Managers,2,4,12.0,24.0,48.0,Office
-Planning - Designers,4,6,6.0,24.0,36.0,Office
-IT - VP IT,1,1,15.0,15.0,15.0,Office
-IT - Sr. Programmer,1,2,12.0,12.0,24.0,Office
-IT - Programmers,3,5,6.0,18.0,30.0,Office
-IT - Consultants,2,3,6.0,12.0,18.0,Office
-Front Office - Receptionist,1,1,8.0,8.0,8.0,Office
-Board Room,1,1,50.0,50.0,50.0,Support
-Board Room Ante Room,1,1,15.0,15.0,15.0,Support
-Board Room Private Toilet,1,1,4.5,4.5,4.5,Support
-Board Room Pantry,1,1,8.0,8.0,8.0,Support
-Conference Room Large,2,2,30.0,60.0,60.0,Support
-Conference Room Small,3,3,20.0,60.0,60.0,Support
-Lunchroom,1,1,80.0,80.0,80.0,Support
-Copy Rooms,2,2,15.0,30.0,30.0,Support
-Receiving Area,1,1,20.0,20.0,20.0,Support
-File Room/Fireproof,1,1,30.0,30.0,30.0,Support
-Library,1,1,25.0,25.0,25.0,Support
-Server Room,1,1,20.0,20.0,20.0,Support
-Satellite Pantry,2,2,12.0,24.0,24.0,Support
-Visitor Coats,1,1,8.0,8.0,8.0,Support
-Staff Coats,57,57,0.5,28.5,28.5,Support
-Restrooms,2,2,25.0,50.0,50.0,Support
+Department,Program Name,Space Count,Area per Space,Color,Width,Depth
+Executive,CEO,1,25.0,#FFE4B5,5.0,5.0
+Executive,CEO Admin Assistant,1,8.0,#FFE4B5,3.2,2.5
+Executive,President,1,25.0,#FFE4B5,5.0,5.0
+Executive,President Admin Assistant,1,8.0,#FFE4B5,3.2,2.5
+Executive,CFO,1,25.0,#FFE4B5,5.0,5.0
+Executive,CFO Admin Assistant,1,8.0,#FFE4B5,3.2,2.5
+Finance,VP Finance,1,15.0,#FFE4B5,5.0,3.0
+Finance,Director of Finance,1,15.0,#FFE4B5,5.0,3.0
+Finance,Accountants,4,6.0,#FFE4B5,3.0,2.0
+Marketing,VP Marketing,1,15.0,#FFE4B5,5.0,3.0
+Marketing,Administrative Assistant,1,8.0,#FFE4B5,3.2,2.5
+Marketing,Analysts,3,6.0,#FFE4B5,3.0,2.0
+Marketing,Product Leaders,2,12.0,#FFE4B5,4.0,3.0
+Real Estate,VP Real Estate,1,15.0,#FFE4B5,5.0,3.0
+Real Estate,Administrative Assistant,1,8.0,#FFE4B5,3.2,2.5
+Real Estate,Leasing Coordinators,2,12.0,#FFE4B5,4.0,3.0
+Real Estate,Lease Administration,2,6.0,#FFE4B5,3.0,2.0
+Planning,VP Planning and Design,1,15.0,#FFE4B5,5.0,3.0
+Planning,Sr. Project Manager,1,12.0,#FFE4B5,4.0,3.0
+Planning,Project Managers,2,12.0,#FFE4B5,4.0,3.0
+Planning,Designers,4,6.0,#FFE4B5,3.0,2.0
+IT,VP IT,1,15.0,#FFE4B5,5.0,3.0
+IT,Sr. Programmer,1,12.0,#FFE4B5,4.0,3.0
+IT,Programmers,3,6.0,#FFE4B5,3.0,2.0
+IT,Consultants,2,6.0,#FFE4B5,3.0,2.0
+Front Office,Receptionist,1,8.0,#FFE4B5,3.2,2.5
+Support,Board Room,1,50.0,#E6E6FA,8.0,6.25
+Support,Board Room Ante Room,1,15.0,#E6E6FA,5.0,3.0
+Support,Board Room Private Toilet,1,4.5,#E6E6FA,2.25,2.0
+Support,Board Room Pantry,1,8.0,#E6E6FA,4.0,2.0
+Support,Conference Room Large,1,30.0,#E6E6FA,6.0,5.0
+Support,Conference Room Small,2,20.0,#E6E6FA,5.0,4.0
+Support,Lunchroom,1,80.0,#E6E6FA,,
+Support,Copy Rooms,2,15.0,#E6E6FA,5.0,3.0
+Support,Receiving Area,1,20.0,#E6E6FA,,
+Support,File Room/Fireproof,1,30.0,#E6E6FA,,
+Support,Library,1,25.0,#E6E6FA,,
+Support,Server Room,1,20.0,#E6E6FA,5.0,4.0
+Support,Satellite Pantry,1,12.0,#E6E6FA,,
+Support,Visitor Coats,1,8.0,#E6E6FA,,
+Support,Staff Coats,41,0.5,#E6E6FA,,
+Support,Restrooms,1,25.0,#E6E6FA,,

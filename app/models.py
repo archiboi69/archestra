@@ -13,8 +13,14 @@ class SiteConstraints:
 @dataclass
 class SitePenaltyWeights:
     """Weights for different penalty factors in site scoring"""
-    green_penalty: float = 0.5     # Weight for distance to green areas
-    noise_penalty: float = 0.5     # Weight for noise level
+    green_penalty: float = 0.3     # Weight for distance to green areas
+    noise_penalty: float = 0.3     # Weight for noise level
+    transport_penalty: float = 0.4  # Weight for transportation accessibility
+    
+    # Transportation sub-weights (should sum to 1.0)
+    bus_tram_weight: float = 0.5   # Most important for daily commute
+    train_weight: float = 0.3      # Important for regional access
+    airport_weight: float = 0.2    # Less important but valuable for business
 
 @dataclass
 class NormalizationRanges:
@@ -23,6 +29,12 @@ class NormalizationRanges:
     max_green_distance: float
     min_noise: float
     max_noise: float
+    min_bus_tram_distance: float
+    max_bus_tram_distance: float
+    min_train_distance: float
+    max_train_distance: float
+    min_airport_distance: float
+    max_airport_distance: float
 
 @dataclass
 class SiteCandidate:
@@ -35,6 +47,9 @@ class SiteCandidate:
     # Scoring metrics
     distance_to_nearest_green: Optional[float] = None  # Distance to nearest green area
     noise_level: Optional[float] = None  # Noise level in dB
+    distance_to_bus_tram: Optional[float] = None
+    distance_to_train: Optional[float] = None
+    distance_to_airport: Optional[float] = None
     
     score: float = 0.0            # Final site suitability score
     
@@ -49,7 +64,10 @@ class SiteCandidate:
         """Calculate site suitability score based on penalty weights"""
         if any(x is None for x in [
             self.distance_to_nearest_green,
-            self.noise_level
+            self.noise_level,
+            self.distance_to_bus_tram,
+            self.distance_to_train,
+            self.distance_to_airport
         ]):
             raise ValueError("All metrics must be set before calculating score")
         
@@ -59,7 +77,7 @@ class SiteCandidate:
                 return 0
             return (value - min_val) / (max_val - min_val)
         
-        # Calculate penalties using pre-calculated ranges
+        # Calculate individual penalties
         green_penalty = normalize(
             self.distance_to_nearest_green,
             ranges.min_green_distance,
@@ -72,10 +90,37 @@ class SiteCandidate:
             np.log(ranges.max_noise)
         )
         
-        # Calculate weighted score
+        # Calculate transportation penalties
+        bus_tram_penalty = normalize(
+            self.distance_to_bus_tram,
+            ranges.min_bus_tram_distance,
+            ranges.max_bus_tram_distance
+        )
+        
+        train_penalty = normalize(
+            self.distance_to_train,
+            ranges.min_train_distance,
+            ranges.max_train_distance
+        )
+        
+        airport_penalty = normalize(
+            self.distance_to_airport,
+            ranges.min_airport_distance,
+            ranges.max_airport_distance
+        )
+        
+        # Calculate composite transport penalty
+        transport_penalty = (
+            bus_tram_penalty * weights.bus_tram_weight +
+            train_penalty * weights.train_weight +
+            airport_penalty * weights.airport_weight
+        )
+        
+        # Calculate final score
         self.score = (
             green_penalty * weights.green_penalty +
-            noise_penalty * weights.noise_penalty
+            noise_penalty * weights.noise_penalty +
+            transport_penalty * weights.transport_penalty
         )
         
         return self.score 

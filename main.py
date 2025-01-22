@@ -40,12 +40,20 @@ def main():
     green_areas_gdf = gpd.read_file('data/GIS/green_areas.gpkg')
     noise_map_gdf = gpd.read_file('data/GIS/noise/noise_map.gpkg')
     
+    # Load transportation data
+    bus_tram_stops_gdf = gpd.read_file('data/GIS/przystanki_tram_bus.gpkg')
+    train_stops_gdf = gpd.read_file('data/GIS/przystanki_kolej.gpkg')
+    airport_gdf = gpd.read_file('data/GIS/airport.gpkg')
+    
     # Ensure all data is in EPSG:2177
     plots_gdf.set_crs("EPSG:2177", inplace=True)
     roads_gdf.set_crs("EPSG:2177", inplace=True)
     buildings_gdf.set_crs("EPSG:2177", inplace=True)
     green_areas_gdf = green_areas_gdf.to_crs("EPSG:2177")
     noise_map_gdf = noise_map_gdf.to_crs("EPSG:2177")
+    bus_tram_stops_gdf = bus_tram_stops_gdf.to_crs("EPSG:2177")
+    train_stops_gdf = train_stops_gdf.to_crs("EPSG:2177")
+    airport_gdf = airport_gdf.to_crs("EPSG:2177")
     
     # Step 3: Initialize site search with project requirements
     print("\n=== Step 3: Searching for Sites ===")
@@ -54,7 +62,10 @@ def main():
         roads_gdf=roads_gdf,
         buildings_gdf=buildings_gdf,
         green_areas_gdf=green_areas_gdf,
-        noise_map_gdf=noise_map_gdf
+        noise_map_gdf=noise_map_gdf,
+        bus_tram_stops_gdf=bus_tram_stops_gdf,
+        train_stops_gdf=train_stops_gdf,
+        airport_gdf=airport_gdf
     )
     
     # Update constraints based on project requirements
