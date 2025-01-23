@@ -32,7 +32,6 @@ class Site(db.Model):
     
     # Relationships
     buildings = db.relationship('Building', back_populates='site', cascade='all, delete-orphan')
-    roads = db.relationship('Road', secondary='site_roads', back_populates='sites')
 
 class Building(db.Model):
     """Represents existing buildings."""
