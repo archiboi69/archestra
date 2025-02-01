@@ -53,10 +53,12 @@ venv/
 env/
 .venv/
 .env/
+
 # ===========================
 # Data
 # ===========================
-
+img/
+output/
 data/
 .data/
 
@@ -73,3 +75,8 @@ data/
 # Sublime Text
 *.sublime-project
 *.sublime-workspace
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
