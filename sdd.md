@@ -41,55 +41,114 @@ Frontend:
 - Tailwind CSS
 - Leaflet.js (for maps)
 
-Backend:
-- Python
-- Flask
-- SQLAlchemy with GeoAlchemy2
-
-Database:
-- PostgreSQL
-- PostGIS
+Database & Backend Services:
+- Prisma Postgres (for data storage)
+- PostGIS capabilities
+- Firebase/MongoDB Atlas (alternative options)
 
 Infrastructure:
+- Static hosting (Vercel)
+- Serverless database
+- Local data processing pipeline
 
-#### 3.1.2 Data Flow
-User inputs → Components → Store actions
-Store actions → State updates
-State updates → Component re-renders
-Components → API calls through services
-Services → Backend API responses → State updates
-State updates → Component re-renders
+### 3.1.2 Data Flow
+1. Initial Data Processing:
+   - Local Python scripts process GIS datasets
+   - Pre-calculated values stored in database
+   - Periodic updates through local pipeline
+
+2. Runtime Data Flow:
+   - User inputs → Components → Store actions
+   - Store actions → Direct database queries
+   - Database responses → State updates
+   - State updates → Component re-renders
 
 ### 3.1.3 Project Structure
-
 ```
 archestra/
-├── backend/
-│   ├── app/
-│   │   ├── __init__.py
-│   │   ├── models/
-│   │   ├── api/
-│   │   └── services/
-│   ├── config.py
-│   ├── requirements.txt
-│   └── run.py
+├── data-pipeline/
+│   ├── process.py        # GIS data processing
+│   ├── upload.py         # Database upload scripts
+│   └── requirements.txt
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   ├── services/
+│   │   ├── services/    # Database interaction
 │   │   ├── stores/
 │   │   └── views/
 │   ├── public/
 │   ├── package.json
-│   └── vite.config.js    # Vue build configuration
+│   └── vite.config.js
 │
-├── .gitignore
-├── README.md
-└── docker-compose.yml    # Optional, for containerization
+└── README.md
 ```
 
 ### 3.2 Frontend Architecture
+
+#### 3.2.1 Database Integration
+
+Example of a database service:
+```javascript
+// services/db.js
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+export const db = {
+  async getMatchingPlots(criteria) {
+    return prisma.plots.findMany({
+      where: {
+        maxUnits: { gte: criteria.minUnits },
+        district: { in: criteria.districts },
+        // Spatial queries via PostGIS
+      }
+    })
+  },
+  
+  async getPlotsByViewport(bounds) {
+    return prisma.plots.findMany({
+      where: {
+        bbox: {
+          // Viewport intersection query
+        }
+      },
+      select: {
+        id: true,
+        center: true,
+        properties: true
+        // Exclude full geometry for performance
+      }
+    })
+  }
+}
+```
+
+#### 3.2.2 Data Processing Pipeline
+
+Example of a data processing script:
+```python
+# data-pipeline/process.py
+import geopandas as gpd
+from sqlalchemy import create_engine
+
+def process_and_upload():
+    # Load and process GIS data
+    gdf = gpd.read_file('raw_plots.geojson')
+    
+    # Pre-calculate important values
+    gdf['buildable_area'] = calculate_buildable_area(gdf)
+    gdf['estimated_min_units'] = estimate_min_units(gdf)
+    gdf['estimated_max_units'] = estimate_max_units(gdf)
+    
+    # Add spatial indexes
+    gdf['bbox'] = gdf.geometry.bounds
+    gdf['center'] = gdf.geometry.centroid
+    
+    # Upload to database
+    engine = create_engine(DATABASE_URL)
+    gdf.to_postgis('plots', engine, if_exists='replace')
+```
 
 #### 3.2.2 Frontend Components
 
@@ -120,8 +179,7 @@ archestra/
   - `DistrictsView.vue`: Shows the district selection interface.
   - `MatchingView.vue`: Presents the results of the plot matching process.
 
-
-#### 3.2.4 API Integration
+### 3.2.4 API Integration
 
 ```javascript
 // services/api.js
@@ -235,50 +293,22 @@ function addBedroom() {
 </script>
 ```
 
-### 3.3 Backend Architecture
+### 3.3 Performance Optimizations
 
-#### 3.3.2 Backend Components
-- **app/**: The main application directory containing all components of the backend.
-  - **__init__.py**: The app factory that initializes the Flask application.
-  - **models/**: Contains SQLAlchemy models that define the database structure.
-    - **__init__.py**: Initializes the models package.
-    - **plot.py**: Defines the Plot model, including PostGIS columns for geographical data.
-    - **district.py**: Defines the District model, also with PostGIS columns.
-    - **household.py**: Contains the Household preferences model.
-    - **cooperative.py**: Manages associations between plots and households.
-  - **api/**: Contains Flask Blueprints for organizing API endpoints.
-    - **__init__.py**: Initializes the API package.
-    - **preferences.py**: Endpoints for managing household preferences.
-    - **plots.py**: Endpoints for searching plots based on user criteria.
-    - **districts.py**: Endpoints for accessing district data.
-  - **services/**: Contains business logic and algorithms.
-    - **__init__.py**: Initializes the services package.
-    - **matching.py**: Implements the plot matching algorithm.
-    - **calculator.py**: Handles cost calculations based on user inputs.
-- **config.py**: Configuration settings for the application.
-- **run.py**: The entry point for running the application.
+#### 3.3.1 Data Loading
+- Progressive loading based on viewport
+- Simplified geometries for overview
+- Full geometry loading on demand
+- Client-side caching of viewed areas
 
-#### 3.3.3 App factory pattern
-```python
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+#### 3.3.2 Calculations
+- Pre-calculated values stored in database
+- Complex calculations done in local pipeline
+- Simple filtering and matching on client
+- Web Workers for heavy client-side operations
 
-db = SQLAlchemy()
-
-def create_app(config_object="config.DevelopmentConfig"):
-    app = Flask(__name__)
-    app.config.from_object(config_object)
-    
-    # Initialize extensions
-    db.init_app(app)
-    CORS(app)  # Needed for Vue.js frontend
-    
-    # Register blueprints
-    from app.api import preferences, plots, districts
-    app.register_blueprint(preferences.bp)
-    app.register_blueprint(plots.bp)
-    app.register_blueprint(districts.bp)
-    
-    return app
-```
+#### 3.3.3 Cost Management
+- Optimize data transfer sizes
+- Cache frequently accessed data
+- Monitor database usage metrics
+- Implement usage limits if needed

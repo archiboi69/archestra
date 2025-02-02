@@ -1,5 +1,0 @@
-@import './base.css';
-@import 'tailwindcss';
-
-/* Any truly global styles that can't be handled by Tailwind */
-/* Try to keep this section as small as possible */
