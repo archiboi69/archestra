@@ -1,6 +1,17 @@
 <template>
     <form>
         <div class="flex flex-col gap-2">
+            <label for="double-bedrooms">Double bedrooms</label>
+            <select id="double-bedrooms" v-model="preferencesStore.spaces.doubleBedrooms" @change="logChange">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="flex flex-col gap-2">
             <label for="single-bedrooms">Single bedrooms</label>
             <select id="single-bedrooms" v-model="preferencesStore.spaces.singleBedrooms" @change="logChange">
                 <option value="0">0</option>
@@ -11,17 +22,6 @@
                 <option value="5">5</option>
             </select>
             <button type="button" @click="preferencesStore.spaces.singleBedrooms++">+ Add bedroom</button>
-        </div>
-        <div class="flex flex-col gap-2">
-            <label for="double-bedrooms">Double bedrooms</label>
-            <select id="double-bedrooms" v-model="preferencesStore.spaces.doubleBedrooms" @change="logChange">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
         </div>
         <div class="flex flex-col gap-2">
             <label for="bathrooms">Bathrooms</label>
