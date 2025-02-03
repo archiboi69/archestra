@@ -5,40 +5,8 @@ import { Card, CardContent, CardTitle, CardDescription, CardHeader } from '@/com
 
 const preferencesStore = usePreferencesStore()
 
-const totalArea = computed(() => {
-    let area = 0
-
-    // Living Room
-    area += preferencesStore.areaConstants.livingRoom[preferencesStore.spaces.livingRoom.size]
-
-    // Kitchen (based on type)
-    area += preferencesStore.areaConstants.kitchen[preferencesStore.spaces.kitchen.type][preferencesStore.spaces.kitchen.size]
-
-    // Double Bedrooms
-    const doubleBedCount = parseInt(preferencesStore.spaces.doubleBedroom.count)
-    if (doubleBedCount > 0) {
-        area += doubleBedCount * preferencesStore.areaConstants.doubleBedroom[preferencesStore.spaces.doubleBedroom.size]
-    }
-
-    // Single Bedrooms
-    const singleBedCount = parseInt(preferencesStore.spaces.singleBedroom.count)
-    if (singleBedCount > 0) {
-        area += singleBedCount * preferencesStore.areaConstants.singleBedroom[preferencesStore.spaces.singleBedroom.size]
-    }
-
-    // Bathrooms
-    const bathroomCount = parseInt(preferencesStore.spaces.bathroom.count)
-    area += bathroomCount * preferencesStore.areaConstants.bathroom[preferencesStore.spaces.bathroom.size]
-
-    // WC
-    const wcCount = parseInt(preferencesStore.spaces.wc.count)
-    if (wcCount > 0) {
-        area += wcCount * preferencesStore.areaConstants.wc
-    }
-
-    // Add 10% for circulation/walls
-    return Math.round(area / 0.9)
-})
+const totalArea = computed(() => preferencesStore.totalArea)
+const commonArea = computed(() => preferencesStore.commonArea)
 
 const roomCount = computed(() => {
     const singleBeds = parseInt(preferencesStore.spaces.singleBedroom.count)
@@ -57,17 +25,48 @@ const apartmentType = computed(() => {
 
 const COST_PER_SQM = {
     construction: 5100,
-    commonAreas: 1600,
     land: 3000
 }
 
+const amenitiesCost = computed(() => {
+    // Required common areas cost based on finish standard
+    const commonAreaCost = preferencesStore.pricesConstants.commonAreaFinish[preferencesStore.amenities.commonAreaFinish] 
+        * preferencesStore.commonAreaShare
+
+    // Optional amenities (elevator, laundry, etc.)
+    const optionalAmenitiesCost = Object.entries(preferencesStore.amenities)
+        .filter(([name, enabled]) => name !== 'commonAreaFinish' && enabled)
+        .reduce((total, [name]) => total + preferencesStore.pricesConstants[name], 0)
+
+    return commonAreaCost + optionalAmenitiesCost
+})
+
+const constructionCostPerSqm = computed(() => COST_PER_SQM.construction)
+const amenitiesCostPerSqm = computed(() => amenitiesCost.value / totalArea.value)
+
+// Calculate average land price from selected districts
+const landCostPerSqm = computed(() => {
+    const selectedDistricts = preferencesStore.selectedDistrictDetails
+    
+    if (selectedDistricts.length === 0) {
+        // Default price when no district selected
+        return 2800 // Average price as fallback
+    }
+
+    // Calculate average price from selected districts
+    const totalPrice = selectedDistricts.reduce((sum, district) => 
+        sum + district.properties.landPrice, 0
+    )
+    return Math.round(totalPrice / selectedDistricts.length)
+})
+
 const totalCostPerSqm = computed(() => 
-    COST_PER_SQM.construction + COST_PER_SQM.commonAreas + COST_PER_SQM.land
+    constructionCostPerSqm.value + 
+    amenitiesCostPerSqm.value + 
+    landCostPerSqm.value
 )
 
-const totalCost = computed(() => 
-    totalArea.value * totalCostPerSqm.value
-)
+const totalCost = computed(() => totalArea.value * totalCostPerSqm.value)
 
 const formatCurrency = (value) => {
     return value.toLocaleString('pl-PL', { 
@@ -91,21 +90,25 @@ const formatPrice = (value) => {
             <CardTitle>{{ apartmentType }}</CardTitle>
             <CardDescription>
                 Powierzchnia użytkowa {{ totalArea }} m²
+                <!-- Add selected districts info -->
+                <div v-if="preferencesStore.selectedDistrictDetails.length > 0" class="mt-1">
+                    {{ preferencesStore.selectedDistrictDetails.map(d => d.properties.name).join(', ') }}
+                </div>
             </CardDescription>
         </CardHeader>
         <CardContent class="space-y-3">
             <div class="space-y-2 text-sm">
                 <div class="flex justify-between">
                     <span>Stan deweloperski</span>
-                    <span class="font-medium">{{ formatPrice(COST_PER_SQM.construction) }} /m²</span>
+                    <span class="font-medium">{{ formatPrice(constructionCostPerSqm) }} /m²</span>
                 </div>
                 <div class="flex justify-between">
                     <span>Części wspólne</span>
-                    <span class="font-medium">{{ formatPrice(COST_PER_SQM.commonAreas) }} /m²</span>
+                    <span class="font-medium">{{ formatPrice(amenitiesCostPerSqm) }} /m²</span>
                 </div>
                 <div class="flex justify-between">
                     <span>Zakup gruntu</span>
-                    <span class="font-medium">{{ formatPrice(COST_PER_SQM.land) }} /m²</span>
+                    <span class="font-medium">{{ formatPrice(landCostPerSqm) }} /m²</span>
                 </div>
                 <div class="flex justify-between pt-2 border-t">
                     <span>Całkowity koszt m²</span>

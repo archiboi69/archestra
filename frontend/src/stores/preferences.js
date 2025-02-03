@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { districts } from '@/data/districts'
 
 export const usePreferencesStore = defineStore('preferences', {
     state: () => ({
@@ -25,6 +26,28 @@ export const usePreferencesStore = defineStore('preferences', {
             wc: {
                 count: '0'
             }
+        },
+        amenities: {
+            commonAreaFinish: 'standard',
+            elevator: false,
+            laundry: false,
+            workshop: false,
+            lounge: false,
+            fitness: false,
+            sauna: false
+        },
+        pricesConstants: {
+            commonAreaFinish: {
+                economy: 5100,
+                standard: 5500,
+                premium: 6200
+            },
+            elevator: 20000,
+            laundry: 10000,
+            workshop: 10000,
+            lounge: 10000,
+            fitness: 10000,
+            sauna: 10000,
         },
         areaConstants: {
             livingRoom: {
@@ -60,22 +83,84 @@ export const usePreferencesStore = defineStore('preferences', {
                 }
             },
             wc: 1.5
+        },
+        location: {
+            selectedDistricts: []  // Array of district IDs
+        },
+        districtsConstants: {
+            mokotow: {
+                name: 'Mokotów',
+                landPrice: 3000,  // Price per m²
+                coordinates: [
+                    [52.193, 21.027],
+                    // ... polygon points
+                ]
+            },
+            // ... other districts
         }
     }),
     getters: {
+        usableArea: (state) => {
+            let area = 0
+
+            // Living Room
+            area += state.areaConstants.livingRoom[state.spaces.livingRoom.size]
+
+            // Kitchen (based on type)
+            area += state.areaConstants.kitchen[state.spaces.kitchen.type][state.spaces.kitchen.size]
+
+            // Double Bedrooms
+            const doubleBedCount = parseInt(state.spaces.doubleBedroom.count)
+            if (doubleBedCount > 0) {
+                area += doubleBedCount * state.areaConstants.doubleBedroom[state.spaces.doubleBedroom.size]
+            }
+
+            // Single Bedrooms
+            const singleBedCount = parseInt(state.spaces.singleBedroom.count)
+            if (singleBedCount > 0) {
+                area += singleBedCount * state.areaConstants.singleBedroom[state.spaces.singleBedroom.size]
+            }
+
+            // Bathrooms
+            const bathroomCount = parseInt(state.spaces.bathroom.count)
+            area += bathroomCount * state.areaConstants.bathroom[state.spaces.bathroom.size]
+
+            // WC
+            const wcCount = parseInt(state.spaces.wc.count)
+            if (wcCount > 0) {
+                area += wcCount * state.areaConstants.wc
+            }
+
+            return area
+        },
         totalArea: (state) => {
-            const usableArea = Object.entries(state.spaces).reduce((total, [roomType, room]) => {
-                const count = room.count ? parseInt(room.count) : 1;
-                return total + (state.areaConstants[roomType][room.size] * count);
-            }, 0);
-            
             // Add 10% for circulation/walls and round to 0 decimal places
-            return (usableArea / 0.9).toFixed(0);
-        }
+            return Math.round(state.usableArea / 0.9)
+        },
+        commonAreaShare: (state) => {
+            // Share of the common area is 25% of the total area and rounded to 2 decimal places
+            return state.totalArea / 3
+        },
+        availableDistricts: () => districts.features,
+        selectedDistrictDetails: (state) => 
+            districts.features.filter(d => 
+                state.location.selectedDistricts.includes(d.properties.id)
+            )
     },
     actions: {
         updateSpaces(newSpaces) {
             this.spaces = newSpaces
+        },
+        toggleAmenity(name) {
+            this.amenities[name] = !this.amenities[name]
+        },
+        toggleDistrict(districtId) {
+            const idx = this.location.selectedDistricts.indexOf(districtId)
+            if (idx === -1) {
+                this.location.selectedDistricts.push(districtId)
+            } else {
+                this.location.selectedDistricts.splice(idx, 1)
+            }
         }
     }
 })
