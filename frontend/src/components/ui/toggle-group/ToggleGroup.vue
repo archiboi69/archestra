@@ -10,6 +10,9 @@ const props = defineProps({
   type: String,
   defaultValue: [String, Array],
   value: [String, Array],
+  disabled: Boolean,
+  rovingFocus: Boolean,
+  loop: Boolean,
 })
 
 const emits = defineEmits(['update:value'])

@@ -1,20 +1,19 @@
-<script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
+<script setup>
 import { cn } from '@/lib/utils'
-import { Primitive, type PrimitiveProps } from 'radix-vue'
-import { type ButtonVariants, buttonVariants } from '.'
-import type { RouteLocationRaw } from 'vue-router'
+import { Primitive } from 'radix-vue'
+import { buttonVariants } from './index.js'
 import { RouterLink } from 'vue-router'
 
-interface Props extends /* @vue-ignore */ PrimitiveProps {
-  variant?: ButtonVariants['variant']
-  size?: ButtonVariants['size']
-  class?: HTMLAttributes['class']
-  to?: RouteLocationRaw
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  as: 'button',
+const props = defineProps({
+  class: String,
+  variant: String,
+  size: String,
+  as: {
+    type: String,
+    default: 'button'
+  },
+  to: [String, Object],
+  asChild: Boolean
 })
 </script>
 

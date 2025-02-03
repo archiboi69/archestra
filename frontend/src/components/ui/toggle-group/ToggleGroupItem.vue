@@ -1,5 +1,5 @@
 <script setup>
-import { toggleVariants } from '@/lib/registry/default/ui/toggle'
+import { toggleVariants } from '@/components/ui/toggle'
 import { cn } from '@/lib/utils'
 import { ToggleGroupItem, useForwardProps } from 'radix-vue'
 import { computed, inject } from 'vue'
@@ -8,7 +8,9 @@ const props = defineProps({
   class: String,
   variant: String,
   size: String,
-  value: String,
+  value: [String, Number],
+  disabled: Boolean,
+  asChild: Boolean,
 })
 
 const context = inject('toggleGroup', {})
