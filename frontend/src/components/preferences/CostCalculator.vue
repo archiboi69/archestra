@@ -28,6 +28,13 @@ const COST_PER_SQM = {
     land: 3000
 }
 
+const constructionCostPerSqm = computed(() => COST_PER_SQM.construction)
+
+// Calculate absolute costs
+const constructionCost = computed(() => 
+    totalArea.value * constructionCostPerSqm.value
+)
+
 const amenitiesCost = computed(() => {
     // Required common areas cost based on finish standard
     const commonAreaCost = preferencesStore.pricesConstants.commonAreaFinish[preferencesStore.amenities.commonAreaFinish] 
@@ -41,10 +48,6 @@ const amenitiesCost = computed(() => {
     return commonAreaCost + optionalAmenitiesCost
 })
 
-const constructionCostPerSqm = computed(() => COST_PER_SQM.construction)
-const amenitiesCostPerSqm = computed(() => amenitiesCost.value / totalArea.value)
-
-// Calculate average land price from selected districts
 const landCostPerSqm = computed(() => {
     const selectedDistricts = preferencesStore.selectedDistrictDetails
     
@@ -60,13 +63,19 @@ const landCostPerSqm = computed(() => {
     return Math.round(totalPrice / selectedDistricts.length)
 })
 
-const totalCostPerSqm = computed(() => 
-    constructionCostPerSqm.value + 
-    amenitiesCostPerSqm.value + 
-    landCostPerSqm.value
+const landCost = computed(() => 
+    totalArea.value * landCostPerSqm.value
 )
 
-const totalCost = computed(() => totalArea.value * totalCostPerSqm.value)
+const totalCost = computed(() => 
+    constructionCost.value + 
+    amenitiesCost.value + 
+    landCost.value
+)
+
+const totalCostPerSqm = computed(() => 
+    Math.round(totalCost.value / totalArea.value)
+)
 
 const formatCurrency = (value) => {
     return value.toLocaleString('pl-PL', { 
@@ -90,7 +99,6 @@ const formatPrice = (value) => {
             <CardTitle>{{ apartmentType }}</CardTitle>
             <CardDescription>
                 Powierzchnia użytkowa {{ totalArea }} m²
-                <!-- Add selected districts info -->
                 <div v-if="preferencesStore.selectedDistrictDetails.length > 0" class="mt-1">
                     {{ preferencesStore.selectedDistrictDetails.map(d => d.properties.name).join(', ') }}
                 </div>
@@ -100,24 +108,24 @@ const formatPrice = (value) => {
             <div class="space-y-2 text-sm">
                 <div class="flex justify-between">
                     <span>Stan deweloperski</span>
-                    <span class="font-medium">{{ formatPrice(constructionCostPerSqm) }} /m²</span>
+                    <span class="font-medium">{{ formatCurrency(constructionCost) }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span>Części wspólne</span>
-                    <span class="font-medium">{{ formatPrice(amenitiesCostPerSqm) }} /m²</span>
+                    <span>Udział w części wspólnej</span>
+                    <span class="font-medium">{{ formatCurrency(amenitiesCost) }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span>Zakup gruntu</span>
-                    <span class="font-medium">{{ formatPrice(landCostPerSqm) }} /m²</span>
+                    <span>Udział w koszcie gruntu</span>
+                    <span class="font-medium">{{ formatCurrency(landCost) }}</span>
                 </div>
-                <div class="flex justify-between pt-2 border-t">
-                    <span>Całkowity koszt m²</span>
-                    <span class="font-medium">{{ formatPrice(totalCostPerSqm) }} /m²</span>
+                <div class="flex justify-between pt-2 border-t text-base font-medium">
+                    <span>Całkowity koszt mieszkania</span>
+                    <span>{{ formatCurrency(totalCost) }}</span>
                 </div>
             </div>
-            <div class="flex justify-between pt-2 border-t text-lg font-medium">
-                <span>Koszt mieszkania</span>
-                <span>{{ formatCurrency(totalCost) }}</span>
+            <div class="flex justify-between pt-2 border-t text-sm text-muted-foreground">
+                <span>Koszt m² mieszkania</span>
+                <span>{{ formatPrice(totalCostPerSqm) }} /m²</span>
             </div>
         </CardContent>
     </Card>
