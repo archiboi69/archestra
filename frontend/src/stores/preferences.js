@@ -85,7 +85,8 @@ export const usePreferencesStore = defineStore('preferences', {
             wc: 1.5
         },
         location: {
-            selectedDistricts: []  // Array of district IDs
+            selectedDistricts: [],  // Array of district IDs
+            selectedPlot: null      // Move selectedPlot inside location
         },
         districtsConstants: {
             mokotow: {
@@ -97,7 +98,7 @@ export const usePreferencesStore = defineStore('preferences', {
                 ]
             },
             // ... other districts
-        }
+        },
     }),
     getters: {
         usableArea: (state) => {
@@ -161,6 +162,10 @@ export const usePreferencesStore = defineStore('preferences', {
             } else {
                 this.location.selectedDistricts.splice(idx, 1)
             }
+        },
+        selectPlot(plot) {
+            this.location.selectedPlot = plot  // Update to use location.selectedPlot
+            console.log('Store updated with plot:', plot)
         }
     }
 })
