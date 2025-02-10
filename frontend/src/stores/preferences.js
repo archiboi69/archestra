@@ -85,19 +85,7 @@ export const usePreferencesStore = defineStore('preferences', {
             wc: 1.5
         },
         location: {
-            selectedDistricts: [],  // Array of district IDs
-            selectedPlot: null      // Move selectedPlot inside location
-        },
-        districtsConstants: {
-            mokotow: {
-                name: 'Mokotów',
-                landPrice: 3000,  // Price per m²
-                coordinates: [
-                    [52.193, 21.027],
-                    // ... polygon points
-                ]
-            },
-            // ... other districts
+            selectedPlot: null
         },
     }),
     getters: {
@@ -146,7 +134,13 @@ export const usePreferencesStore = defineStore('preferences', {
         selectedDistrictDetails: (state) => 
             districts.features.filter(d => 
                 state.location.selectedDistricts.includes(d.properties.id)
-            )
+            ),
+        landCostPerSqm: (state) => {
+            if (state.location.selectedPlot) {
+                return state.location.selectedPlot.land_cost_per_m2
+            }
+            return 2800 // Default when no plot selected
+        }
     },
     actions: {
         updateSpaces(newSpaces) {
@@ -155,17 +149,8 @@ export const usePreferencesStore = defineStore('preferences', {
         toggleAmenity(name) {
             this.amenities[name] = !this.amenities[name]
         },
-        toggleDistrict(districtId) {
-            const idx = this.location.selectedDistricts.indexOf(districtId)
-            if (idx === -1) {
-                this.location.selectedDistricts.push(districtId)
-            } else {
-                this.location.selectedDistricts.splice(idx, 1)
-            }
-        },
         selectPlot(plot) {
-            this.location.selectedPlot = plot  // Update to use location.selectedPlot
-            console.log('Store updated with plot:', plot)
+            this.location.selectedPlot = plot
         }
     }
 })

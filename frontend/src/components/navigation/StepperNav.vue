@@ -5,7 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 // Define the steps
 const steps = [
   { id: 'spaces', label: 'Mieszkanie', route: '/preferences' },
-  { id: 'amenities', label: 'Części wspólne', route: '/amenities' },
+  { id: 'amenities', label: 'Budynek', route: '/amenities' },
   { id: 'location', label: 'Lokalizacja', route: '/location' },
   { id: 'summary', label: 'Podsumowanie', route: '/summary' }
 ]

@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto py-6">
-        <h1 class="text-3xl font-bold mb-6">Konfigurator mieszkania</h1>
+        <h1 class="text-3xl font-bold mb-6">Mieszkanie</h1>
         <SpaceSelector />
         <CostCalculator />
     </div>

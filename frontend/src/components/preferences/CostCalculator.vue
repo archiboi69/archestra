@@ -48,24 +48,9 @@ const amenitiesCost = computed(() => {
     return commonAreaCost + optionalAmenitiesCost
 })
 
-const landCostPerSqm = computed(() => {
-    const selectedDistricts = preferencesStore.selectedDistrictDetails
-    
-    if (selectedDistricts.length === 0) {
-        // Default price when no district selected
-        return 2800 // Average price as fallback
-    }
+const landCostPerSqm = computed(() => preferencesStore.landCostPerSqm)
 
-    // Calculate average price from selected districts
-    const totalPrice = selectedDistricts.reduce((sum, district) => 
-        sum + district.properties.landPrice, 0
-    )
-    return Math.round(totalPrice / selectedDistricts.length)
-})
-
-const landCost = computed(() => 
-    totalArea.value * landCostPerSqm.value
-)
+const landCost = computed(() => totalArea.value * landCostPerSqm.value)
 
 const totalCost = computed(() => 
     constructionCost.value + 
@@ -91,16 +76,18 @@ const formatPrice = (value) => {
         maximumFractionDigits: 0
     }) + ' zł'
 }
+
+const selectedPlot = computed(() => preferencesStore.location.selectedPlot)
 </script>
 
 <template>
-    <Card class="fixed bottom-4 right-4 w-96 shadow-lg bg-background/95 backdrop-blur">
+    <Card class="fixed bottom-4 right-4 w-96 shadow-lg bg-background/95 backdrop-blur z-[1000]">
         <CardHeader>
             <CardTitle>{{ apartmentType }}</CardTitle>
             <CardDescription>
                 Powierzchnia użytkowa {{ totalArea }} m²
-                <div v-if="preferencesStore.selectedDistrictDetails.length > 0" class="mt-1">
-                    {{ preferencesStore.selectedDistrictDetails.map(d => d.properties.name).join(', ') }}
+                <div v-if="selectedPlot" class="mt-1">
+                    {{ selectedPlot.obreb }} - {{ selectedPlot.address_point }}
                 </div>
             </CardDescription>
         </CardHeader>
@@ -115,7 +102,7 @@ const formatPrice = (value) => {
                     <span class="font-medium">{{ formatCurrency(amenitiesCost) }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span>Udział w koszcie gruntu</span>
+                    <span>Udział w gruncie</span>
                     <span class="font-medium">{{ formatCurrency(landCost) }}</span>
                 </div>
                 <div class="flex justify-between pt-2 border-t text-base font-medium">
