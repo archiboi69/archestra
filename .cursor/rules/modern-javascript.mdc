@@ -1,0 +1,23 @@
+---
+description: Modern JavaScript ruleset for clean, readable, and maintainable code.
+globs: **/*.js
+---
+Use const for constants and let for mutable values. Prefer const over let when possible. Avoid var.
+
+Use arrow functions for short functions. Use async/await instead of raw Promises. Avoid function expressions unless necessary.
+
+Use object and array destructuring. Use spread/rest operators instead of Object.assign() or loops.
+
+Use async/await over .then()/.catch(). Use Promise.all() for parallel async operations. Avoid callback-based async patterns.
+
+Use .map(), .filter(), and .reduce() instead of manual loops where possible. Avoid index-based loops unless necessary.
+
+Use template literals instead of string concatenation.
+
+Use class instead of prototype-based OOP. Use getters and setters for encapsulation.
+
+Use ES modules (import/export) instead of require().
+
+Use optional chaining (?.) and nullish coalescing (??) for safe property access.
+
+Use default parameters instead of || fallback. Use named exports instead of default exports. Prefer immutability by avoiding direct object and array mutation.
