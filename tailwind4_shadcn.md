@@ -211,13 +211,3 @@ const forwarded = useForwardPropsEmits(props, emits)
 import Button from '@/components/ui/button/Button.vue'
 </script>
 ```
-
-## Best Practices
-
-1. Use CSS variables directly when possible instead of utilities
-2. Specify border colors explicitly (no more default gray-200)
-3. Use `@utility` for component base styles
-4. Use parentheses syntax for CSS variables
-5. Consider hover as progressive enhancement
-6. Use semantic color names in your theme variables
-7. Keep component-specific utilities in `global.css`

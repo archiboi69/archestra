@@ -1,0 +1,18 @@
+{
+    "mcpServers": {
+      "memory": {
+        "command": "/bin/bash",
+        "args": [
+            "/Users/michaldeja/Documents/GitHub/archestra/run_memory_server.sh"
+        ]
+      },
+      "filesystem": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-filesystem",
+          "/Users/michaldeja/Desktop"
+        ]
+      }
+    }
+  }

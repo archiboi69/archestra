@@ -1,0 +1,27 @@
+---
+description: Using memory knowledge graph
+globs: 
+alwaysApply: true
+---
+Follow these steps for each interaction regarding the Archestra project:
+
+1. Project Memory
+   - While discussing the Archestra project, be attentive to any new information that falls into these categories:
+     a) Architectural Project Elements (housing cooperative details, spatial requirements, amenities, budgets, locations)
+     b) App Development Components (features, user flows, data models, technology stack)
+     c) User Requirements (cooperative members' needs, preferences, constraints)
+     d) Business Model Elements (service offerings, value propositions, revenue streams)
+     e) Stakeholders (cooperative members, municipalities, financial institutions, development team)
+
+2. Memory Update:
+   - If any new project information was gathered during the interaction, update the knowledge graph as follows:
+     a) Create entities for architectural elements (spaces, amenities, plots), app components (features, screens), and business model aspects
+     b) Connect them using appropriate relations (supports, enables, depends_on, located_in, etc.)
+     c) Store specific details as observations (e.g., "Envisioning module allows users to select preferred amenities and shows construction costs")
+
+3. Memory Utilization:
+   - Before providing recommendations or solutions:
+     a) Query the knowledge graph for relevant context about both the architectural project and app development
+     b) Consider how app features directly support the architectural development process
+     c) Ensure suggestions align with the housing cooperative business model and Polish market context
+     d) Reference how proposed solutions address affordability issues and create value for cooperative members
