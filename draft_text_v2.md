@@ -1,4 +1,11 @@
+A Computational Framework for Urban Family Housing in Poland
+
 # Abstract
+Poland's housing market exhibits a structural mismatch between supply and demand, particularly for families seeking larger apartments in urban locations. The market is dominated by developer-built investment-oriented smaller units in cities and individual self-build houses in suburban areas, forcing families to either compromise on space or relocate to suburbs, fundamentally altering their lifestyle preferences. This thesis examines collective self-development (CSD) as a potential alternative that addresses this gap in housing provision. Through analysis of established German *baugruppen* model and pioneering Polish initiatives, the research identifies three key requirements for successful implementation: developing a procedural framework, strategic market positioning, and rebranding traditional cooperativism to overcome local cultural barriers.
+
+The project demonstrates a comprehensive four-stage implementation process (Interest, Planning, Building, and Owner Communities) to develop a multi-family residence on an urban infill site in Poznań, Poland. It utilizes a computational design workflow that allows the development to mediate between 9-15 households' specific needs while integrating shared amenities that would be unaffordable individually. The design achieves a 20-30% cost advantage over comparable developer-built housing while maintaining high-quality and creating spaces that foster community interaction.
+
+By addressing procedural complexity, land acquisition challenges, and the tension between economic and social considerations, this thesis establishes collective self-development as a viable "third way" between developer-built and self-build housing. The implementation model provides a template that can be adapted across Poland's urban centers, enabling families to remain in cities while accessing appropriately sized housing that meets their spatial needs, lifestyle preferences, and financial constraints.
 # Aim
 # Relevance
 ## Housing affordability crisis
@@ -252,17 +259,39 @@ First let's outline the procedure.
 - with commercial or communal spaces included
 
 ## Site selection
-I need to find suitable plots for the development as envisioned. They need to be sized and zoned properly. For that i will use public data from EGIB and POG of Poznań.
+To find a site suitable for the development as envisioned the city of Poznań was chosen. Since the project is aimed at families that would like to live an urban lifestyle, the search had to be narrowed down to environments that support this lifestyle.
 
-Perfect target plot will be:
-- central
-- empty
-- zoned for apartments (SW)
-- sufficiently high 
-Data sources
-prepare data:
-- intersect EGIB with POG
-- exclude non buildable plots defined (roads, water, green
+The conditions of urban environment are characterized by sufficient density, access to amenities, mixed-use development, and built form defining clear public spaces. As classification of Poznań's districts is not the main topic of the thesis, the maximum Floor Area Ratio (FAR) in planning zones was chosen as the proxy for urban environment.
+
+The zoning data from provisional General Plan of Poznań (as of January 2025) was used. The General plan divides the city into planning zones, and in each of the zones describes the list of permitted uses and basic urban form measures - Floor Area Ratio, Building Site Coverage, Building Height and Green Area Coverage.
+
+Figure shows the map of planning zones in Poznań, with those permitting multi-family residential use colored according to the maximum FAR permitted. The analysis shows that consolidated areas with planning zones permitting moderate-to-high FAR correspond to the cadastral districts of Poznań, Jezyce, Łazarz and Wilda. Poznań cadastral district which encompasses the city center was excluded as being out of reach for a cooperative due to competition and land prices.
+
+These three chosen districts include mostly XIXth century developments surrounding the medieval core of the city. These are dense areas with a variety of uses, amenities, and well-defined network of public streets and squares therfore filling the definition of environment supporting an urban lifestyle.
+
+Moreover, since these areas are mostly developed, the expected empty plots should include urban infill or redevelopment sites aligning with the objective of strategic market positioning.
+
+To enable collective self-build development and avoid direct competition with professional developers an ideal plot would be zoned for high density multi-family while not being large enough to be feassible for developers.
+
+Polish cadaster data (Ewidencja Gruntów i Budynków) was used to find potential sites. All plots in cadaster districts Jezyce, Łazarz and Wilda were imported and the data was preprocessed to exclude sites not feasible for development. All developed plots, plots smaller than 200m2, not-buildable plots (roads, parks, water bodies etc.), awkwardly shaped plots (with shape index lower than 0.3) were excluded.
+
+The remaining plots were intersected with planning zones allowing for FAR greater than 4. This produced a list of 43 locations consists of empty plots, zoned for multi-family residential development in urban environments. All plots are either urban infill or redevelopments. The redevelopments include the sites of former chocalate factory in Jezyce, H. Cegielski factory in Wilda and railroad company in Łazarz.
+
+Bigger plots and groups of adjacent plots that can be joined are perfect for real estate developers and therefore are hard competition for collective self-build. These sites were excluded. To finalize the choice of the site investment map of poznan municipality was used (Poznań, 2025). It's an online list of properties that Poznań wants to develop in the future. Given the objective of providing clear neighborhood benefit to win municipal support the only site of that meets the previous criteria and is part of that list was chosen.
+
+The site is Gąsiorowskich 6. It is located in Łazarz. It's a former railway company site located in close proximity to main railway station. Łazarz neighbourhood is vibrant with retail, parks, farmers market (rynek łazarski), fair grounds (międzynarodowe targi poznańskie) nearby. It is well connected with the city center by tram line. Additionally, premetro (Poznański Szybki Tramwaj) station is nearby.
+
+The site is 600 sqm rectangular urban infill site and is currently used as a parking. It is directly fronting the street (from Southwest), a 6-story residential building from northwest, back yard currently used as warehouses and a single story store from the southeast.
+A large plot nearby is currently being redeveloped by a developer which will serve as a perfect comparison point to collective self-build. 
+*Site is not covered by a local plan which under Polish law requires going through a procedure of obtaining development conditions from the municipality.* maybe use the general plan provisions 
+
+## Develpment conditions 
+
+The general plan specifies maximum allowable for the site:
+- FAR 7.6
+- BSC 0.95
+- Building height 27m
+- Green area 0.3
 
 
 # Results

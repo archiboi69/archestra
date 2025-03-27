@@ -537,3 +537,19 @@ class DevelopmentConditions:
         
         # Save the DXF file
         doc.saveas(filename) 
+
+
+def main():
+
+    plots_gdf = gpd.read_file('data/GIS/2261_dzialki_egib_wfs_gml.gml')
+    roads_gdf = gpd.read_file('data/GIS/2261_ulice_egib_wfs_gml.gml')
+    buildings_gdf = gpd.read_file('data/GIS/budynki_2022.gpkg')
+    site 
+    
+    development_conditions = DevelopmentConditions(site, plots, roads, buildings)
+    development_conditions.analyze()
+    development_conditions.visualize()
+    #development_conditions.export_to_dxf("development_conditions.dxf")
+
+if __name__ == "__main__":
+    main()
