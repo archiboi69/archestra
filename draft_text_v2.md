@@ -304,22 +304,44 @@ Moreover, adjacent large plot (Kolejowa 1A-C) is being redeveloped by a develope
 A local plan is currently being developed by the municipality, but is not yet availble to the public as of March 2025. The site is included in the infill development zone ('obszar uzupełnień zabudowy') of the general plan, and as such is eligble for development based on establishing development conditions ('warunki zabudowy').
 
 The general plan specifies multi-family residential use and following urban form metrics for the planning zone that covers the site:
-- Floor Area Ratio 7.6
+- max Floor Area Ratio 7.6
 - Building Site Coverage 0.95
 - Maximum building height 27m
 - Biologically active area 0.3
 
 Moreover, the site is in the inner city zone ('obszar zabudowy śródmiejskiej'), which reduces the biologically active area metric to 0.2, besides lowering certain technical requirements for the building.
 
-Development conditions are therefore calculated according to the algorithm provided by the Ministry of Development and Technology. They consist of the setback line, building height, floor area ratio, building site coverage, biologically active area, parking spaces and roof type and are devised from the averege in the surrounding area.
+Development conditions are therefore calculated according to the algorithm provided by the Ministry of Development and Technology. They consist of the urban form metrics such as the setback line, building height, floor area ratio, building site coverage and are devised from the averege in the surrounding area.
 
-### Setback line 
+### Setback line and building height
 
-Setback line is drawn as the extension of the setback lines on the surrounding properties accessed from the same public road. Since there the only direct neighbor accessed from the same public road has a building on the property line (no setback), no setback line is drawn on the site.
+Setback line and building height are drawn as the extension of the surrounding properties accessed from the same public road. Since there the only direct neighbor accessed from the same public road has a building on the property line (no setback), no setback line is drawn for the site. The building height is set to the same height as the neighbor - 20m.
 
-### Building height
+### Floor Area Ratio and Building Site Coverage
 
-Building height 
+FAR and BSC are derived from the average of plots with residential buildings in the analysis area (radius of 3 times the front width) with an added 20% tolerance.
+
+Given the analysis max FAR is set to 3.9 (within 7.6 in the general plan) and BSC capped to 0.95 from the general plan. 
+
+### Feasability 
+
+Given the development conditions the site is deemed feasible for the development. 542.28 sqm x 3.9 FAR = 2000 sqm of gross floor area over 5 floors which is enough to support the targeted 9-15 households cooperative.
+
+
+## Architectural proposal
+
+The second importannt thing is the flexibility. As proposed in the procedural framework the building design is to be conceived before gathering the other people for collective self development. This way it overcomes the limitations of implementation in the polish context (uncertainity, novelty) - it shows a tangible design that helps people imagine they could actually live there. The issue is that one of the main benefits of collective self development is the customisation of the living spaces according to ones needs. Given that architecturally a flexible solution that can adapt to the actual apartment/family mix is needed.
+
+As such a building is designed with a flexible construction system. All Load bearing walls are constructed perpendicular to the facade dividing the building lengthwise into 3 main bays. this has several benefits for the residential floors:
+- 4 distinct floor plans can be derived ranging from a 4 way subdivision into smaller flats (1x 2 bedroom, 2x 3 bedroom, 1x 4 bedroom) to 2 big family apartments spanning the floor.
+- since there is no perpendicular separation, the light can penetrate far into the floor plate - givin maximum flesxibility to the residents now, and in the future if they decide to rearange their flat.
+- since the facade is not load-bearing it can be adjusted to suit the taste of the residents
+
+A 5 floor building is proposed with a basement parking is proposed. The enterance and entryway are from the street side of the building. The basement parking is a single story with 9 parking spaces and storage units. On The street side of the ground floor is a retail unit. This helps to win over the municipality and nimbys because it will lively up the neighbourhood. also the rents from the retail unit can be used to lower the operating costs of the building. The courtyard side of the ground floor is a communal loung opening up to a small garden. Given the generous ceiling heights and a south-east facing curtain wall it is a space flushed with natural light even tough it is on the ground floor of a very dense development. This space can serve as an integration for the residents if they develop a community like in Nowe Zerniki. Alternatively given a separate access from the outside and a The rest of the indoor space is circulation, garbage collection rooms (separate for the residences and the retail unit)
+
+## Flexible reservation system
+
+
 
 
 
