@@ -16,7 +16,7 @@ This exceptional price growth results from multiple factors affecting both marke
 
 Poland presents a particularly instructive case of these affordability challenges. Research by the European Observation Network for Territorial Development and Cohesion (ESPON) has identified a distinctive pattern in Poland's housing market. While most European countries show right-skewed housing price distributions—meaning more lower-priced housing—Poland exhibits an approximately normal distribution (ESPON, 2024). This pattern, when considered alongside Poland's income distribution (where median income falls substantially below average income), reveals a structural mismatch between housing supply and affordability needs (Statistics Poland, 2024).
 
-The affordability problem becomes most severe for families seeking appropriately sized housing. When examining the financial requirements for a 100m² unit—a size typically needed by families—Poland ranks among the European Union's least accessible housing markets. Many regions require more than one person's complete income for renting such units or demand over 35 years of dedicating 40% of annual income for purchase (ESPON, 2024). Lack of adequate housing is shown as a major factor in driving suburbanization as young families leave the cities for cheaper suburbs.
+The affordability problem is most severe for families seeking appropriately sized housing. When examining the financial requirements for a 100m² unit—a size typically needed by families—Poland ranks among the European Union's least accessible housing markets. Many regions require more than one person's complete income for renting such units or demand over 35 years of dedicating 40% of annual income for purchase (ESPON, 2024). Lack of adequate housing is shown as a major factor in driving suburbanization as young families leave the cities for cheaper suburbs.
 
 ## Structure of housing supply
 
@@ -36,7 +36,7 @@ This stark contrast in development approaches has created pronounced market segm
 
 One promising approach to bridging this market gap is collaborative housing, an umbrella term encompassing various forms of resident-led development. While diverse forms of collaborative housing have gained traction across Europe, implementing such models in Poland requires careful consideration of the local context. Research indicates that collaborative housing faces several cultural and practical barriers in Poland. Young Poles strongly prioritize individual homeownership, viewing it as a marker of life success, and generally resist shared living arrangements. For those more inclined to sharing resources, financial savings emerge as the primary motivation, while concerns about lengthy development processes, limited space, and shared ownership structures act as significant deterrents (Lis et al., 2023).
 
-Given these cultural preferences and constraints, this thesis focuses specifically on collective self-development as the most promising collaborative housing model for the Polish market. At its core, collective self-development involves coordination between future residents and other stakeholders throughout the development process, with residents actively participating in planning, design, and sometimes construction while maintaining individual autonomy in their living spaces (Czischke et al., 2021). This approach aligns with local preferences while leveraging the benefits of group coordination.
+Given these cultural preferences and constraints, this thesis focuses specifically on one branch of collaborative housing —collective self-development— as the most promising collaborative housing model for the Polish market. At its core, collective self-development involves coordination between future residents and other stakeholders throughout the development process, with residents actively participating in planning, design, and sometimes construction while maintaining individual autonomy in their living spaces (Czischke et al., 2021). This approach aligns with local preferences while leveraging the benefits of group coordination.
 
 The following table illustrates how collective self-development positions itself as a "third way" between traditional developer-built and individual self-build housing:
 
@@ -52,7 +52,9 @@ The following table illustrates how collective self-development positions itself
 | Time Horizon | Short-term focus; limited post-sale involvement | Medium to long-term; emphasis on community building | Long-term perspective on maintenance and operations |
 | Target Market | Investment-oriented buyers, first-time homeowners seeking convenience | Urban middle-class families seeking affordability and community | Families seeking customization and cost control |
 
-The affordability crisis and structural market gaps identified earlier create a compelling need to examine collective self-development in depth. With housing prices outpacing incomes by significant margins and current market options failing to serve middle-income families adequately, alternative approaches that can deliver quality housing at lower costs become essential. As collective self-development models have already demonstrated promising results in other European contexts, particularly Germany, and have begun to emerge in Poland, a systematic examination of these models offers valuable insights into addressing Poland's specific housing challenges. By understanding both mature implementations and early Polish initiatives, we can identify adaptable strategies for scaling this approach as a viable "third way" in Poland's housing landscape.
+The affordability crisis and structural market gaps identified earlier create a compelling need to examine collective self-development in depth. With housing prices outpacing incomes by significant margins and current market options failing to serve middle-income families adequately, alternative approaches that can deliver quality housing at lower costs become essential.
+
+As collective self-development models have already demonstrated promising results in other European contexts, particularly Germany, and have begun to emerge in Poland, a systematic examination of these models offers valuable insights into addressing Poland's specific housing challenges. By understanding both mature implementations and early Polish initiatives, we can identify adaptable strategies for scaling this approach as a viable "third way" in Poland's housing landscape.
 
 # State of the art
 
@@ -215,7 +217,7 @@ Future initiatives would benefit from strategically addressing municipal priorit
 
 The analysis of existing collective self-development models has revealed four critical domains where current implementations fall short: procedural frameworks, strategic market positioning, balancing economic and social benefits, and institutional engagement. These gaps represent practical obstacles that hinder the wider adoption of an otherwise promising housing delivery approach.
 
-Rather than attempting to address all possible improvements to collective self-development, this project focuses on elements that would most significantly enhance viability and appeal in the Polish context. The emphasis on procedural clarity addresses the "Everything Community" problem that has complicated early Polish initiatives, while the focus on strategic market positioning acknowledges the reality of Poland's developer-dominated land market. Similarly, the objectives related to balancing economic and social benefits respond directly to the tension observed between Pomorze's cost-focused approach and Nowe Żerniki's community orientation. These objectives collectively aim to address the fundamental challenge identified in the analysis: how to transform collective self-development from a merely innovative concept to a genuinely desirable housing alternative.
+Rather than attempting to address all possible improvements to collective self-development, this project focuses on elements that would most significantly enhance viability and appeal in the Polish context. The emphasis on procedural clarity addresses the "Everything Community" problem that has complicated early Polish initiatives, while the focus on strategic market positioning acknowledges the reality of Poland's developer-dominated land market. Similarly, the objectives related to balancing economic and social benefits respond directly to the tension observed between Pomorze's cost-focused approach and Nowe Żerniki's community orientation. These objectives collectively aim to address the fundamental challenge identified in the analysis: how to transform collective self-development from an innovation to a genuinely desirable housing alternative.
 
 ## Procedural Objectives
 
@@ -226,9 +228,9 @@ Since in this approach the Building Community members are not involved earlier b
 
 ## Market Positioning Objectives
 
-In response to the challenges of market positioning and land acquisition, the project will target a specific demographic currently underserved by conventional development: young urban families and individuals with high agency who seek larger, customized apartments in central locations. This demographic alignment focuses on participants with both the motivation and capacity to engage in a collaborative development process.
+In response to the challenges of market positioning and land acquisition, the project will target a specific demographic currently underserved by conventional development: urban families and individuals with high agency which seek larger, customized apartments in central locations. This demographic choice focuses on participants with both the motivation and capacity to engage in a collaborative development process.
 
-The project will identify and develop a site that occupies the middle segment of the land market—zoned for multi-family residential but possessing characteristics that make it unattractive to conventional developers. By focusing on brownfield, urban infill, or urban renewal locations, the project will create value in areas overlooked by conventional development. This strategic site selection will demonstrate how collective self-development can succeed without relying on municipal land allocation.
+The project will identify and develop a site that is zoned for multi-family residential but possessing characteristics that make it unattractive to conventional developers. By focusing on brownfield, urban infill, or urban renewal locations, the project will create value in areas overlooked by conventional development.
 
 ## Economic and Social Objectives
 
@@ -238,7 +240,7 @@ The project will demonstrate measurable cost savings compared to equivalent deve
 
 ## Institutional and Perception Objectives
 
-To overcome institutional barriers to cooperative housing, the project will emphasise community benefit through developing commercial or mixed-use spaces that provide direct value to the surrounding neighborhood. These spaces will create clear benefits for municipal stakeholders, potentially serving as a basis for negotiating favorable terms for land acquisition or regulatory approval. By demonstrating how collective self-development can contribute to broader urban revitalization, the project will position these initiatives as valuable partners in addressing municipal priorities.
+To overcome institutional barriers to cooperative housing, the project will emphasise community benefit through developing additional spaces that provide direct value to the surrounding neighborhood. These spaces will create clear benefits for municipal stakeholders, potentially serving as a basis for negotiating favorable terms for land acquisition or regulatory approval. By demonstrating how collective self-development can contribute to broader urban revitalization, the project will position these initiatives as valuable partners in addressing municipal priorities.
 
 The project will identify specific provisions of the 2022 Housing Cooperatives Act that can be leveraged to facilitate implementation, creating a model for how future initiatives can navigate this relatively new legal framework.
 
@@ -258,40 +260,67 @@ First let's outline the procedure.
 - with cost-effective amenities (for example where an apartment will be bad (ground floor))
 - with commercial or communal spaces included
 
+Site:
+big enough for 9-15 households, central, not good for developer, on municipal land to benefit from act on housing cooperatives
+
 ## Site selection
 To find a site suitable for the development as envisioned the city of Poznań was chosen. Since the project is aimed at families that would like to live an urban lifestyle, the search had to be narrowed down to environments that support this lifestyle.
 
-The conditions of urban environment are characterized by sufficient density, access to amenities, mixed-use development, and built form defining clear public spaces. As classification of Poznań's districts is not the main topic of the thesis, the maximum Floor Area Ratio (FAR) in planning zones was chosen as the proxy for urban environment.
+The conditions of urban environment are characterized by sufficient density, access to amenities, mixed-use development, and built form defining clear public spaces. As classification of Poznań's districts is not the main topic of the thesis, the maximum Floor Area Ratio (FAR) in planning zones of the provisional General Plan of Poznań (Poznań, 2025A) was chosen as the proxy for urban environment.
 
-The zoning data from provisional General Plan of Poznań (as of January 2025) was used. The General plan divides the city into planning zones, and in each of the zones describes the list of permitted uses and basic urban form measures - Floor Area Ratio, Building Site Coverage, Building Height and Green Area Coverage.
+The General plan divides the city into planning zones, and in each of the zones describes the list of permitted uses and basic urban form measures - Floor Area Ratio, Building Site Coverage, Building Height and Green Area Coverage.
 
-Figure shows the map of planning zones in Poznań, with those permitting multi-family residential use colored according to the maximum FAR permitted. The analysis shows that consolidated areas with planning zones permitting moderate-to-high FAR correspond to the cadastral districts of Poznań, Jezyce, Łazarz and Wilda. Poznań cadastral district which encompasses the city center was excluded as being out of reach for a cooperative due to competition and land prices.
+Figure shows the map of planning zones in Poznań, with those permitting multi-family residential use colored according to the maximum FAR permitted. The analysis shows that consolidated areas with planning zones permitting moderate-to-high FAR (greater than 4) correspond to the cadastral districts of Poznań, Jezyce, Łazarz and Wilda. 'Poznań' cadastral district which encompasses the city center was excluded as being out of reach for a cooperative due to competition and land prices.
 
-These three chosen districts include mostly XIXth century developments surrounding the medieval core of the city. These are dense areas with a variety of uses, amenities, and well-defined network of public streets and squares therfore filling the definition of environment supporting an urban lifestyle.
+The three chosen districts include mostly XIXth century developments surrounding the medieval core of the city. These are dense areas with a variety of uses, amenities, and well-defined network of public streets and squares therfore filling the definition of environment supporting an urban lifestyle.
 
 Moreover, since these areas are mostly developed, the expected empty plots should include urban infill or redevelopment sites aligning with the objective of strategic market positioning.
 
-To enable collective self-build development and avoid direct competition with professional developers an ideal plot would be zoned for high density multi-family while not being large enough to be feassible for developers.
+To avoid direct competition with professional developers an ideal plot would be zoned for high density multi-family while not being large enough to be feassible for developers.
 
 Polish cadaster data (Ewidencja Gruntów i Budynków) was used to find potential sites. All plots in cadaster districts Jezyce, Łazarz and Wilda were imported and the data was preprocessed to exclude sites not feasible for development. All developed plots, plots smaller than 200m2, not-buildable plots (roads, parks, water bodies etc.), awkwardly shaped plots (with shape index lower than 0.3) were excluded.
 
-The remaining plots were intersected with planning zones allowing for FAR greater than 4. This produced a list of 43 locations consists of empty plots, zoned for multi-family residential development in urban environments. All plots are either urban infill or redevelopments. The redevelopments include the sites of former chocalate factory in Jezyce, H. Cegielski factory in Wilda and railroad company in Łazarz.
+The remaining plots were intersected with planning zones allowing for FAR greater than 4. This produced a list of 43 locations consists of empty plots, zoned for multi-family residential development in urban environments. All plots are either urban infill or redevelopments. The redevelopments include the sites of former chocalate factory in Jezyce, H. Cegielski factory in Wilda and adjacent to a railroad in Łazarz.
 
-Bigger plots and groups of adjacent plots that can be joined are perfect for real estate developers and therefore are hard competition for collective self-build. These sites were excluded. To finalize the choice of the site investment map of poznan municipality was used (Poznań, 2025). It's an online list of properties that Poznań wants to develop in the future. Given the objective of providing clear neighborhood benefit to win municipal support the only site of that meets the previous criteria and is part of that list was chosen.
+Bigger plots and groups of adjacent plots that can be joined are perfect for real estate developers and therefore are hard competition for collective self-build. These sites were excluded. To finalize the choice of the site investment map of poznan municipality was used (Poznań, 2025B). It's an online list of properties that Poznań wants to sell and develop in the future. Given the objective of providing clear neighborhood benefit to win municipal support the only site of that meets the previous criteria and is part of that list was chosen.
 
-The site is Gąsiorowskich 6. It is located in Łazarz. It's a former railway company site located in close proximity to main railway station. Łazarz neighbourhood is vibrant with retail, parks, farmers market (rynek łazarski), fair grounds (międzynarodowe targi poznańskie) nearby. It is well connected with the city center by tram line. Additionally, premetro (Poznański Szybki Tramwaj) station is nearby.
+The site address is Gąsiorowskich 6 in Łazarz cadaster district. It's a former railroads area located in close proximity to main railway station. Łazarz is vibrant neighbourhood with retail, parks, farmers market (rynek łazarski) and Poznań's renowned fair grounds (Międzynarodowe Targi Poznańskie) nearby. It is well connected with the city center by a tram line, and to the northern districts with a premetro (Poznański Szybki Tramwaj).
 
-The site is 600 sqm rectangular urban infill site and is currently used as a parking. It is directly fronting the street (from Southwest), a 6-story residential building from northwest, back yard currently used as warehouses and a single story store from the southeast.
-A large plot nearby is currently being redeveloped by a developer which will serve as a perfect comparison point to collective self-build. 
-*Site is not covered by a local plan which under Polish law requires going through a procedure of obtaining development conditions from the municipality.* maybe use the general plan provisions 
+The site is xxx sqm rectangular urban infill site and is currently used as a parking. It is directly fronting the street (from Southwest), a 6-story residential building from northwest, back yard currently used as warehouses and a single story store from the southeast.
 
-## Develpment conditions 
+Moreover,the site is positioned at an internal corner of the street with a 2-story residential building situated 2m diagonally from the southern corner of the site (address Kolejowa 1). This is a tricky situation, as the fire regulations demand a minimal distance between buildings or separating them with a fire wall (Warunki Techniczne, 2024). Therefore the ability to build on the site is dictated by meeting the provisions for fire protection of the lower building (see map).
 
-The general plan specifies maximum allowable for the site:
-- FAR 7.6
-- BSC 0.95
-- Building height 27m
-- Green area 0.3
+This involves cooperation with the owner of the Kolejowa 1 building (in this case the municipality) and as such can dissuade investment from real-estate developers. It is however a perfect situation for a collective self-development scenario where renovation of the building (complete with fire protection) can be part of the deal with municipality as made possible via the act on housing cooperatives.
+
+When buying the property from the municipality the act on housing cooperatives stipulates possible alternative forms of settlement, i.e. crediting the price of the property with the price of the apartment from the investment, if you plan to sell it to the municipality.
+
+The proposal will therfore include a sale of both the empty Gąsiorowskich 6 plot and the Kolejowa 1 plot, credited with the price of the renovated and fire protected building. This enables the development of a tricky urban infill site which ties into city development priorities, gives the city fresh renovated housing stock. The cooperative gain cheaper upfront cost for the land, and municipal backing which is very beneficial for cooperatives (as mentioned in the state of the art).
+
+Moreover, adjacent large plot (Kolejowa 1A-C) is being redeveloped by a developer at the time of this writing and will serve as a perfect comparison point to collective self-build. 
+
+
+## Develpment conditions on the chosen site
+
+A local plan is currently being developed by the municipality, but is not yet availble to the public as of March 2025. The site is included in the infill development zone ('obszar uzupełnień zabudowy') of the general plan, and as such is eligble for development based on establishing development conditions ('warunki zabudowy').
+
+The general plan specifies multi-family residential use and following urban form metrics for the planning zone that covers the site:
+- Floor Area Ratio 7.6
+- Building Site Coverage 0.95
+- Maximum building height 27m
+- Biologically active area 0.3
+
+Moreover, the site is in the inner city zone ('obszar zabudowy śródmiejskiej'), which reduces the biologically active area metric to 0.2, besides lowering certain technical requirements for the building.
+
+Development conditions are therefore calculated according to the algorithm provided by the Ministry of Development and Technology. They consist of the setback line, building height, floor area ratio, building site coverage, biologically active area, parking spaces and roof type and are devised from the averege in the surrounding area.
+
+### Setback line 
+
+Setback line is drawn as the extension of the setback lines on the surrounding properties accessed from the same public road. Since there the only direct neighbor accessed from the same public road has a building on the property line (no setback), no setback line is drawn on the site.
+
+### Building height
+
+Building height 
+
 
 
 # Results
